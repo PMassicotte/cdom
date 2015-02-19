@@ -1,10 +1,12 @@
 Package: cdom
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1
+Title: R functions to model CDOM spectra
+Version: 0.1.0
 Date: 2015-02-19
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Philippe Massicotte
+Maintainer: Philippe Massicotte <pm@bios.au.dk>
+Description: Provides functions to model CDOM spectra following the method presented in
+  Massicotte and Markager 2015.
+License: GPL (>= 2)
+Depends: R (>= 3.0)
 LazyData: TRUE
