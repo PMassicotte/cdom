@@ -2,11 +2,11 @@ Package: cdom
 Type: Package
 Title: R functions to model CDOM spectra
 Version: 0.1.0
-Date: 2015-02-19
-Author: Philippe Massicotte
-Maintainer: Philippe Massicotte <pm@bios.au.dk>
-Description: Provides functions to model CDOM spectra following the method presented in
-  Massicotte and Markager 2015.
+Date: 02-10-2015
+Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk",
+  role = c("aut", "cre"))
+Description: Provides various functions to model CDOM absorption spectra.
 License: GPL (>= 2)
 Depends: R (>= 3.0)
 LazyData: TRUE
+Imports: minpack.lm
