@@ -4,7 +4,7 @@
 \alias{fit_exponential}
 \title{Fit an exponential model to CDOM data.}
 \usage{
-fit_exponential(wl, spectra, wl0, startwl, endwl)
+fit_exponential(wl, spectra, wl0 = 350, startwl, endwl)
 }
 \arguments{
 \item{wl}{The wavelength vector.}

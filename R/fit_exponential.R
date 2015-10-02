@@ -34,7 +34,7 @@
 #' plot(spectra$wavelength, spectra$absorbance)
 #' lines(spectra$wavelength, predict(fit), col = "red")
 
-fit_exponential <- function(wl, spectra, wl0, startwl, endwl){
+fit_exponential <- function(wl, spectra, wl0 = 350, startwl, endwl){
 
   if(length(wl) != length(spectra)){
     stop("wl and spectra are not of the same length.")
@@ -44,6 +44,8 @@ fit_exponential <- function(wl, spectra, wl0, startwl, endwl){
     stop("wl and spectra need to be numeric.")
   }
 
+  if(missing(startwl)){startwl = min(wl)}
+  if(missing(endwl)){endwl = max(wl)}
   #--------------------------------------------
   # Get a0 value.
   #--------------------------------------------
