@@ -24,6 +24,9 @@ the model did not converged.
 \description{
 Fit an exponential model to CDOM data.
 }
+\details{
+\deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
+}
 \examples{
 # Fit an exponential model using the reference wavelength 350 between 190 and 900 nm.
 

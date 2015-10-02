@@ -8,6 +8,9 @@
 
 #' Fit an exponential model to CDOM data.
 #'
+#' @details \deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
+#'
+#'
 #' @param wl The wavelength vector.
 #' @param spectra The spectra vector.
 #' @param wl0 The reference wavelength (ex.: 350).
@@ -33,19 +36,25 @@
 
 fit_exponential <- function(wl, spectra, wl0, startwl, endwl){
 
+  if(length(wl) != length(spectra)){
+    stop("wl and spectra are not of the same length.")
+  }
+
+  if(!is.numeric(wl) | !is.numeric(spectra)){
+    stop("wl and spectra need to be numeric.")
+  }
+
   #--------------------------------------------
   # Get a0 value.
   #--------------------------------------------
   sf <- splinefun(wl, spectra)
   a0 <- sf(wl0)
 
-
   #--------------------------------------------
   # Extract CDOM data based on user inputs.
   #--------------------------------------------
   xx <- wl[which(wl >= startwl & wl <= endwl)]
   yy <- spectra[which(wl >= startwl & wl <= endwl)]
-
 
   #--------------------------------------------
   # Fit the data.
@@ -54,7 +63,6 @@ fit_exponential <- function(wl, spectra, wl0, startwl, endwl){
                   warnOnly = FALSE,
                   maxiter = 1024,
                   maxfev = 600)
-
 
   out <- tryCatch(
     {
