@@ -36,6 +36,15 @@ fit <- fit_exponential(wl = spectra$wavelength,
 lines(spectra$wavelength, predict(fit), col = "red")
 ```
 
+### Calculate the slope ratio (SR)
+
+```{r sr}
+library(cdom)
+data("spectra")
+
+slope_ratio(spectra$wavelength, spectra$absorbance)
+```
+
 
 ## References
 
