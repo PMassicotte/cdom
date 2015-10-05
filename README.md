@@ -23,8 +23,8 @@ Please note that this is a developing version of the package for testing only. P
 Examples
 ========
 
-Calculate the *standard* spectral slope.
-----------------------------------------
+The spectral slope (S) by Jerlov et al. 1968.
+---------------------------------------------
 
 The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Bricaud et al. 1981.
 
@@ -50,8 +50,8 @@ lines(spectra$wavelength, predict(fit), col = "red")
 
 ![](README-exponential-1.png)
 
-Calculate the slope ratio (SR)
-------------------------------
+The slope ratio (SR) by Helms et al. 2008.
+------------------------------------------
 
 The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. 2008 for details.
 
@@ -63,6 +63,21 @@ slope_ratio(spectra$wavelength, spectra$absorbance)
 #> wl_275_295 
 #>  0.7519547
 ```
+
+The spectral curve by Loiselle et al. 2009.
+-------------------------------------------
+
+The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum over a sliding 21 nm interval (default) with 1 nm resolution.
+
+``` r
+library(cdom)
+data("spectra")
+
+res <-  spectral_curve(spectra$wavelength, spectra$absorbance)
+plot(res$wl, res$s)
+```
+
+![](README-spectral_slope-1.png)
 
 References
 ==========

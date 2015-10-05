@@ -1,15 +1,15 @@
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-# FILE:         spectral_slope.R
+# FILE:         spectral_curve.R
 #
 # AUTHOR:       Philippe Massicotte
 #
-# DESCRIPTION:  Calculate the spectral slope of CDOM spectra has proposed by
+# DESCRIPTION:  Calculate the spectral curve of CDOM spectra has proposed by
 #               Loiselle et al. 2009
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-#' Calculate the spectral slope of CDOM spectra
+#' Calculate the spectral curve of CDOM spectra.
 #'
-#' @description Calculate the spectral slope of CDOM spectra has proposed by
+#' @description Calculate the spectral curve of CDOM spectra has proposed by
 #               Loiselle et al. 2009
 #' @param wl The wavelength vector.
 #' @param spectra The spectra vector.
@@ -29,10 +29,10 @@
 #' @examples
 #'data(spectra)
 #'
-#'res <- spectral_slope(spectra$wavelength, spectra$absorbance)
+#'res <- spectral_curve(spectra$wavelength, spectra$absorbance)
 #'plot(res$wl, res$s, type = "l")
 
-spectral_slope <- function(wl, spectra, interval = 21, r2threshold = 0.8) {
+spectral_curve <- function(wl, spectra, interval = 21, r2threshold = 0.8) {
 
   if(length(wl) != length(spectra)){
     stop("wl and spectra are not of the same length.")
