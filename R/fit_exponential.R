@@ -94,12 +94,4 @@ fit_exponential <- function(wl, spectra, wl0 = 350, startwl, endwl){
 
     }
   )
-
-
-
-
-
-
-
-
 }
