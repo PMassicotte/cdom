@@ -10,7 +10,7 @@ There are two main goals:
     -   The **slope ratio** (Helms et al., 2008).
     -   The well-known spectral slope (**S**) proposed by Bricaud et al., 1981.
 
-2.  The **Gaussian decomposition approach** proposed in MAssicotte and Markager, 2015.
+2.  The **Gaussian decomposition approach** proposed in Massicotte and Markager, 2015.
 
 The package can be installed using the following command.
 
@@ -48,7 +48,7 @@ fit <- fit_exponential(wl = spectra$wavelength,
 lines(spectra$wavelength, predict(fit), col = "red")
 ```
 
-![](README-exopnential-1.png)
+![](README-exponential-1.png)
 
 Calculate the slope ratio (SR)
 ------------------------------

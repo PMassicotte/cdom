@@ -23,7 +23,7 @@ There are two main goals:
     + The **slope ratio** (Helms et al., 2008).
     + The well-known spectral slope (**S**) proposed by Bricaud et al., 1981.
 
-2. The **Gaussian decomposition approach** proposed in MAssicotte and Markager, 2015.
+2. The **Gaussian decomposition approach** proposed in Massicotte and Markager, 2015.
 
 The package can be installed using the following command.
 
@@ -44,7 +44,7 @@ The `fit_exponential()` function fits an exponential curve to CDOM data using th
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
 ```
 
-```{r exopnential}
+```{r exponential}
 
 library(cdom)
 data("spectra")
