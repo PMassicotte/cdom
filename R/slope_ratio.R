@@ -49,8 +49,8 @@ slope_ratio <- function(wl, spectra) {
   #--------------------------------------------
   # Calculate the ratio.
   #--------------------------------------------
-  slope_275_295 <- coef(lm(data_275_295 ~ wl_275_295))[2]
-  slope_350_400 <- coef(lm(data_350_400 ~ wl_350_400))[2]
+  slope_275_295 <- coef(lm(log(data_275_295) ~ wl_275_295))[2]
+  slope_350_400 <- coef(lm(log(data_350_400) ~ wl_350_400))[2]
 
   #--------------------------------------------
   # Return the result.
