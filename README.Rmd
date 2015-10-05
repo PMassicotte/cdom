@@ -25,6 +25,13 @@ There are two main goals:
 
 2. The **Gaussian decomposition approach** proposed in MAssicotte and Markager, 2015.
 
+The package can be installed using the following command.
+
+```{r install, eval = FALSE}
+devtools::install_github("PMassicotte/cdom")
+```
+
+
 Please note that this is a developing version of the package for testing only. Please fill an issue if you find bugs.
 
 # Examples
@@ -37,7 +44,7 @@ The `fit_exponential()` function fits an exponential curve to CDOM data using th
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
 ```
 
-```{r, dev='svg'}
+```{r exopnential}
 
 library(cdom)
 data("spectra")

@@ -12,6 +12,12 @@ There are two main goals:
 
 2.  The **Gaussian decomposition approach** proposed in MAssicotte and Markager, 2015.
 
+The package can be installed using the following command.
+
+``` r
+devtools::install_github("PMassicotte/cdom")
+```
+
 Please note that this is a developing version of the package for testing only. Please fill an issue if you find bugs.
 
 Examples
