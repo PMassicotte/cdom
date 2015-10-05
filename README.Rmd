@@ -80,7 +80,7 @@ library(cdom)
 data("spectra")
 
 res <-  spectral_curve(spectra$wavelength, spectra$absorbance)
-plot(res$wl, res$s)
+plot(res$wl, res$s, type = "l")
 
 ```
 
