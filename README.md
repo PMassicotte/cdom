@@ -20,13 +20,14 @@ Examples
 Calculate the *standard* spectral slope.
 ----------------------------------------
 
-The `fit_exponential()` function fit an exponential curve to CDOM data using the simple model proposed by Bricaud et al. 1981.
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Bricaud et al. 1981.
 
-\[
+``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
-\]
+```
 
 ``` r
+
 library(cdom)
 data("spectra")
 
@@ -41,9 +42,12 @@ fit <- fit_exponential(wl = spectra$wavelength,
 lines(spectra$wavelength, predict(fit), col = "red")
 ```
 
-![](README-unnamed-chunk-2-1.png)
+![](README-exopnential-1.png)
 
-### Calculate the slope ratio (SR)
+Calculate the slope ratio (SR)
+------------------------------
+
+The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. 2008 for details.
 
 ``` r
 library(cdom)
@@ -51,11 +55,11 @@ data("spectra")
 
 slope_ratio(spectra$wavelength, spectra$absorbance)
 #> wl_275_295 
-#>   6.838766
+#>  0.7519547
 ```
 
 References
-----------
+==========
 
 Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor, David J. Kieber, and Kenneth Mopper. 2008. “Absorption Spectral Slopes and Slope Ratios as Indicators of Molecular Weight, Source, and Photobleaching of Chromophoric Dissolved Organic Matter.” Limnology and Oceanography 53 (3): 955–69. <doi:10.4319/lo.2008.53.3.0955>.
 
