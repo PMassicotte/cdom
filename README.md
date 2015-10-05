@@ -6,9 +6,9 @@ The **cdom** package implements various functions used to model and calculate me
 There are two main goals:
 
 1.  Provides simple wrappers to calculate commonly metrics found in the literature.
-    -   The **spectral slope** (Loiselle et al., 2009).
-    -   The **slope ratio** (Helms et al., 2008).
-    -   The well-known spectral slope (**S**) proposed by Bricaud et al., 1981.
+    -   The **spectral curve** (Loiselle et al., 2009).
+    -   The **slope ratio (Sr)** (Helms et al., 2008).
+    -   The **spectral slope (S)** proposed by Bricaud et al., 1981.
 
 2.  The **Gaussian decomposition approach** proposed in Massicotte and Markager, 2015.
 
@@ -23,10 +23,10 @@ Please note that this is a developing version of the package for testing only. P
 Examples
 ========
 
-The spectral slope (S) by Jerlov et al. 1968.
+The spectral slope (S) by Jerlov et al. 1968?
 ---------------------------------------------
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Bricaud et al. 1981.
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by ???
 
 ``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
