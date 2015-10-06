@@ -67,7 +67,7 @@ ggplot(spectra, aes(x = wavelength, y = absorbance)) +
 
 ```
 
-## The slope ratio (SR) by Helms et al. 2008.
+## The slope ratio (SR) by Helms et al. (2008).
 
 The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for details.
 
