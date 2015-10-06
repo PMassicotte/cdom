@@ -55,7 +55,7 @@ slope_ratio <- function(wl, spectra) {
   #--------------------------------------------
   # Return the result.
   #--------------------------------------------
-  sr <- slope_275_295 / slope_350_400
+  sr <- as.numeric(slope_275_295 / slope_350_400)
 
   return(sr)
 }
