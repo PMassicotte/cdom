@@ -29,7 +29,7 @@ This package provides:
     + The **slope ratio (Sr)** -- Helms et al., (2008).
     + The **spectral slope (S)** -- Bricaud et al., (1981).
 
-2. The **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
+2. The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
 The package can be installed using the following command.
 
@@ -43,7 +43,7 @@ Please note that this is a developing version of the package for testing only. P
 
 ## The spectral slope (S) by Jerlov et al. (1968) 
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968)
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968).
 
 ```tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K

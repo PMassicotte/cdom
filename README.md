@@ -10,7 +10,7 @@ This package provides:
     -   The **slope ratio (Sr)** -- Helms et al., (2008).
     -   The **spectral slope (S)** -- Bricaud et al., (1981).
 
-2.  The **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
+2.  The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
 The package can be installed using the following command.
 
@@ -26,7 +26,7 @@ Examples
 The spectral slope (S) by Jerlov et al. (1968)
 ----------------------------------------------
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968)
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968).
 
 ``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -51,8 +51,8 @@ ggplot(spectra, aes(x = wavelength, y = absorbance)) +
 
 ![](README-exponential-1.png)
 
-The slope ratio (SR) by Helms et al. 2008.
-------------------------------------------
+The slope ratio (SR) by Helms et al. (2008).
+--------------------------------------------
 
 The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for details.
 
