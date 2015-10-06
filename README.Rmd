@@ -1,4 +1,5 @@
 ---
+bibliography: library.bib
 output:
   md_document:
     variant: markdown_github
@@ -17,7 +18,6 @@ library(ggplot2)
 theme_set(theme_bw(base_size = 12, base_family = "Open Sans"))
 ```
 
-
 # CDOM
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM). 
@@ -25,9 +25,9 @@ The **cdom** package implements various functions used to model and calculate me
 This package provides:
 
 1. Simple wrappers to calculate commonly metrics found in the literature.
-    + The **spectral curve** -- Loiselle et al., (2009).
-    + The **slope ratio (Sr)** -- Helms et al., (2008).
-    + The **spectral slope (S)** -- Bricaud et al., (1981).
+    + The **spectral curve** -- @Loiselle2009.
+    + The **slope ratio (Sr)** -- @Helms2008.
+    + The **spectral slope (S)** -- @Jerlov1968.
 
 2. The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
@@ -41,7 +41,7 @@ Please note that this is a developing version of the package for testing only. P
 
 # Examples
 
-## The spectral slope (S) by Jerlov et al. (1968) 
+## The spectral slope (S) by @Jerlov1968. 
 
 The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968).
 
@@ -67,7 +67,7 @@ ggplot(spectra, aes(x = wavelength, y = absorbance)) +
 
 ```
 
-## The slope ratio (SR) by Helms et al. (2008).
+## The slope ratio (SR) by @Helms2008.
 
 The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for details.
 
@@ -78,7 +78,7 @@ data("spectra")
 slope_ratio(spectra$wavelength, spectra$absorbance)
 ```
 
-## The spectral curve by Loiselle et al. (2009).
+## The spectral curve by @Loiselle2009.
 
 The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding windows of 21 nm interval (default) at 1 nm resolution.
 
@@ -96,9 +96,3 @@ ggplot(res, aes(x = wl, y = s)) +
 ```
 
 # References
-
-Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor, David J. Kieber, and Kenneth Mopper. 2008. “Absorption Spectral Slopes and Slope Ratios as Indicators of Molecular Weight, Source, and Photobleaching of Chromophoric Dissolved Organic Matter.” Limnology and Oceanography 53 (3): 955–69. doi:10.4319/lo.2008.53.3.0955.
-
-Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci, Antonio Tognazzi, Andres Cézar, and Claudio Rossi. 2009. “The Optical Characterization of Chromophoric Dissolved Organic Matter Using Wavelength Distribution of Absorption Spectral Slopes.” Limnology and Oceanography 54 (2): 590–97. doi:10.4319/lo.2009.54.2.0590.
-
-Massicotte, Philippe, and Stiig Markager. 2015. “Using a Gaussian Decomposition Approach to Model Absorption Spectra of Chromophoric Dissolved Organic Matter.”
