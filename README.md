@@ -3,14 +3,14 @@ CDOM
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM).
 
-There are two main goals:
+This package provides:
 
-1.  Provides simple wrappers to calculate commonly metrics found in the literature.
-    -   The **spectral curve** (Loiselle et al., 2009).
-    -   The **slope ratio (Sr)** (Helms et al., 2008).
-    -   The **spectral slope (S)** proposed by Bricaud et al., 1981.
+1.  Simple wrappers to calculate commonly metrics found in the literature.
+    -   The **spectral curve** -- Loiselle et al., (2009).
+    -   The **slope ratio (Sr)** -- Helms et al., (2008).
+    -   The **spectral slope (S)** -- Bricaud et al., (1981).
 
-2.  The **Gaussian decomposition approach** proposed in Massicotte and Markager, 2015.
+2.  The **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
 The package can be installed using the following command.
 
@@ -18,26 +18,23 @@ The package can be installed using the following command.
 devtools::install_github("PMassicotte/cdom")
 ```
 
-Please note that this is a developing version of the package for testing only. Please fill an issue if you find bugs.
+Please note that this is a developing version of the package for testing only. Please fill an issue when you find bugs.
 
 Examples
 ========
 
-The spectral slope (S) by Jerlov et al. 1968?
----------------------------------------------
+The spectral slope (S) by Jerlov et al. (1968)
+----------------------------------------------
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by ???
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968)
 
 ``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
 ```
 
 ``` r
-
 library(cdom)
 data("spectra")
-
-plot(spectra$wavelength, spectra$absorbance)
 
 fit <- fit_exponential(wl = spectra$wavelength,
                        spectra = spectra$absorbance,
@@ -45,7 +42,11 @@ fit <- fit_exponential(wl = spectra$wavelength,
                        startwl = 190,
                        endwl = 900)
 
-lines(spectra$wavelength, predict(fit), col = "red")
+ggplot(spectra, aes(x = wavelength, y = absorbance)) +
+  geom_point() +
+  geom_line(aes(y = predict(fit)), col = "red") +
+  xlab("Wavelength (nm)") +
+  ylab(expression(paste("Absorbance (", m ^ {-1}, ")")))
 ```
 
 ![](README-exponential-1.png)
@@ -53,7 +54,7 @@ lines(spectra$wavelength, predict(fit), col = "red")
 The slope ratio (SR) by Helms et al. 2008.
 ------------------------------------------
 
-The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. 2008 for details.
+The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for details.
 
 ``` r
 library(cdom)
@@ -64,20 +65,24 @@ slope_ratio(spectra$wavelength, spectra$absorbance)
 #>  0.7519547
 ```
 
-The spectral curve by Loiselle et al. 2009.
--------------------------------------------
+The spectral curve by Loiselle et al. (2009).
+---------------------------------------------
 
-The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum over a sliding 21 nm interval (default) with 1 nm resolution.
+The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding windows of 21 nm interval (default) at 1 nm resolution.
 
 ``` r
 library(cdom)
 data("spectra")
 
 res <-  spectral_curve(spectra$wavelength, spectra$absorbance)
-plot(res$wl, res$s, type = "l")
+
+ggplot(res, aes(x = wl, y = s)) +
+  geom_line() +
+  xlab("Wavelength (nm)") +
+  ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 ```
 
-![](README-spectral_slope-1.png)
+![](README-spectral_curve-1.png)
 
 References
 ==========
