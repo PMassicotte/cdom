@@ -10,7 +10,6 @@
 #'
 #' @details \deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
 #'
-#'
 #' @param wl The wavelength vector.
 #' @param spectra The spectra vector.
 #' @param wl0 The reference wavelength (ex.: 350).
@@ -18,7 +17,7 @@
 #' @param endwl The ending wavelength (ex.: 600).
 #'
 #' @return A list contianing the \code{nls} object and the \code{R2}. NULL if
-#' the model did not converged.
+#'   the model did not converged.
 #' @export
 #'
 #' @import minpack.lm

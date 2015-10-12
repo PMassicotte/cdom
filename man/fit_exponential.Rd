@@ -19,7 +19,7 @@ fit_exponential(wl, spectra, wl0 = 350, startwl, endwl)
 }
 \value{
 A list contianing the \code{nls} object and the \code{R2}. NULL if
-the model did not converged.
+  the model did not converged.
 }
 \description{
 Fit an exponential model to CDOM data.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/spectral_curve.R
 \name{spectral_curve}
 \alias{spectral_curve}
-\title{Calculate the spectral curve of CDOM spectra}
+\title{Calculate the spectral curve of CDOM spectra.}
 \usage{
 spectral_curve(wl, spectra, interval = 21, r2threshold = 0.8)
 }
@@ -14,15 +14,17 @@ spectral_curve(wl, spectra, interval = 21, r2threshold = 0.8)
 \item{interval}{The interval used to claculate each slope (default = 21 nm).}
 
 \item{r2threshold}{The r2 threshold that determines if a slope is "valide".
-The default value is 0.8 meaning that the determination coefficient of the
-regression between log-transformed data and wavelength should be >= 0.8.}
+ The default value is 0.8 meaning that the determination coefficient of the
+ regression between log-transformed data and wavelength should be >= 0.8.}
 }
 \value{
 A dataframe containing the centered wavelength, the calculated slope
-and the determination coefficient of the linear regression used to claculate the slope.
+ and the determination coefficient of the linear regression used to claculate
+ the slope.
 }
 \description{
 Calculate the spectral curve of CDOM spectra has proposed by
+ Loiselle et al. 2009.
 }
 \examples{
 data(spectra)

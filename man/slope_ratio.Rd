@@ -20,7 +20,7 @@ Calculate the slope ratio (SR) from an absorption spectra.
 \details{
 Calculate the slope ratio (SR) as defined by Helms et al. (2008).
 
-\deqn{SR = \frac{S_{275-295}}{S_{350-400}}}
+  \deqn{SR = \frac{S_{275-295}}{S_{350-400}}}
 }
 \examples{
 data("spectra")

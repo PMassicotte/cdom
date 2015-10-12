@@ -7,24 +7,27 @@
 #               Loiselle et al. 2009
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-#' Calculate the spectral curve of CDOM spectra.
+#'Calculate the spectral curve of CDOM spectra.
 #'
-#' @description Calculate the spectral curve of CDOM spectra has proposed by
-#               Loiselle et al. 2009
-#' @param wl The wavelength vector.
-#' @param spectra The spectra vector.
-#' @param interval The interval used to claculate each slope (default = 21 nm).
-#' @param r2threshold The r2 threshold that determines if a slope is "valide".
-#' The default value is 0.8 meaning that the determination coefficient of the
-#' regression between log-transformed data and wavelength should be >= 0.8.
+#'@description Calculate the spectral curve of CDOM spectra has proposed by
+#'  Loiselle et al. 2009.
 #'
-#' @references \url{http://doi.wiley.com/10.4319/lo.2009.54.2.0590}
+#'@inheritParams fit_exponential
 #'
-#' @return A dataframe containing the centered wavelength, the calculated slope
-#' and the determination coefficient of the linear regression used to claculate the slope.
-#' @export
+#'@param interval The interval used to claculate each slope (default = 21 nm).
 #'
-#' @import dplyr
+#'@param r2threshold The r2 threshold that determines if a slope is "valide".
+#'  The default value is 0.8 meaning that the determination coefficient of the
+#'  regression between log-transformed data and wavelength should be >= 0.8.
+#'
+#'@references \url{http://doi.wiley.com/10.4319/lo.2009.54.2.0590}
+#'
+#'@return A dataframe containing the centered wavelength, the calculated slope
+#'  and the determination coefficient of the linear regression used to claculate
+#'  the slope.
+#'@export
+#'
+#'@import dplyr
 #'
 #' @examples
 #'data(spectra)

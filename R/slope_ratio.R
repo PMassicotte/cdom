@@ -10,12 +10,11 @@
 #'
 #' @details Calculate the slope ratio (SR) as defined by Helms et al. (2008).
 #'
-#' \deqn{SR = \frac{S_{275-295}}{S_{350-400}}}
+#'   \deqn{SR = \frac{S_{275-295}}{S_{350-400}}}
 #'
 #' @references \url{http://www.aslo.org/lo/toc/vol_53/issue_3/0955.html}
 #'
-#' @param wl The wavelength vector.
-#' @param spectra The spectra vector.
+#' @inheritParams fit_exponential
 #'
 #' @return The value of the slope ratio.
 #' @export
