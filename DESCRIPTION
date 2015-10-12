@@ -1,7 +1,7 @@
 Package: cdom
 Type: Package
 Title: R functions to model CDOM spectra
-Version: 0.1.0
+Version: 0.0.0.9000
 Date: 02-10-2015
 Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk",
   role = c("aut", "cre"))
