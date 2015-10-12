@@ -4,12 +4,12 @@
 \alias{slope_ratio}
 \title{Calculate the slope ratio (SR) from an absorption spectra.}
 \usage{
-slope_ratio(wl, spectra)
+slope_ratio(wl, absorbance)
 }
 \arguments{
 \item{wl}{The wavelength vector.}
 
-\item{spectra}{The spectra vector.}
+\item{absorbance}{The absorbance vector.}
 }
 \value{
 The value of the slope ratio.
@@ -24,7 +24,7 @@ Calculate the slope ratio (SR) as defined by Helms et al. (2008).
 }
 \examples{
 data("spectra")
-slope_ratio(spectra$wavelength, spectra$absorbance)
+slope_ratio(spectra$wavelength, spectra$spc1)
 }
 \references{
 \url{http://www.aslo.org/lo/toc/vol_53/issue_3/0955.html}

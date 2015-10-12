@@ -4,12 +4,12 @@
 \alias{spectral_curve}
 \title{Calculate the spectral curve of CDOM spectra.}
 \usage{
-spectral_curve(wl, spectra, interval = 21, r2threshold = 0.8)
+spectral_curve(wl, absorbance, interval = 21, r2threshold = 0.8)
 }
 \arguments{
 \item{wl}{The wavelength vector.}
 
-\item{spectra}{The spectra vector.}
+\item{absorbance}{The absorbance vector.}
 
 \item{interval}{The interval used to claculate each slope (default = 21 nm).}
 
@@ -29,7 +29,7 @@ Calculate the spectral curve of CDOM spectra has proposed by
 \examples{
 data(spectra)
 
-res <- spectral_curve(spectra$wavelength, spectra$absorbance)
+res <- spectral_curve(spectra$wavelength, spectra$spc2)
 plot(res$wl, res$s, type = "l")
 }
 \references{

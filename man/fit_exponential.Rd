@@ -4,12 +4,12 @@
 \alias{fit_exponential}
 \title{Fit an exponential model to CDOM data.}
 \usage{
-fit_exponential(wl, spectra, wl0 = 350, startwl, endwl)
+fit_exponential(wl, absorbance, wl0 = 350, startwl, endwl)
 }
 \arguments{
 \item{wl}{The wavelength vector.}
 
-\item{spectra}{The spectra vector.}
+\item{absorbance}{The absorbance vector.}
 
 \item{wl0}{The reference wavelength (ex.: 350).}
 
@@ -32,10 +32,10 @@ Fit an exponential model to CDOM data.
 
 data(spectra)
 
-fit <- fit_exponential(spectra$wavelength, spectra$absorbance, 350, 190, 900)
+fit <- fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 summary(fit)
 
-plot(spectra$wavelength, spectra$absorbance)
+plot(spectra$wavelength, spectra$spc1)
 lines(spectra$wavelength, predict(fit), col = "red")
 }
 

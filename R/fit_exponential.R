@@ -11,7 +11,7 @@
 #' @details \deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
 #'
 #' @param wl The wavelength vector.
-#' @param spectra The spectra vector.
+#' @param absorbance The absorbance vector.
 #' @param wl0 The reference wavelength (ex.: 350).
 #' @param startwl The starting wavelength (ex.: 240).
 #' @param endwl The ending wavelength (ex.: 600).
@@ -27,20 +27,20 @@
 #'
 #' data(spectra)
 #'
-#' fit <- fit_exponential(spectra$wavelength, spectra$absorbance, 350, 190, 900)
+#' fit <- fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 #' summary(fit)
 #'
-#' plot(spectra$wavelength, spectra$absorbance)
+#' plot(spectra$wavelength, spectra$spc1)
 #' lines(spectra$wavelength, predict(fit), col = "red")
 
-fit_exponential <- function(wl, spectra, wl0 = 350, startwl, endwl){
+fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
 
-  if(length(wl) != length(spectra)){
+  if(length(wl) != length(absorbance)){
     stop("wl and spectra are not of the same length.")
   }
 
-  if(!is.numeric(wl) | !is.numeric(spectra)){
-    stop("wl and spectra need to be numeric.")
+  if(!is.numeric(wl) | !is.numeric(absorbance)){
+    stop("wl and absorbance need to be numeric.")
   }
 
   if(missing(startwl)){startwl = min(wl)}
@@ -48,14 +48,14 @@ fit_exponential <- function(wl, spectra, wl0 = 350, startwl, endwl){
   #--------------------------------------------
   # Get a0 value.
   #--------------------------------------------
-  sf <- splinefun(wl, spectra)
+  sf <- splinefun(wl, absorbance)
   a0 <- sf(wl0)
 
   #--------------------------------------------
   # Extract CDOM data based on user inputs.
   #--------------------------------------------
   xx <- wl[which(wl >= startwl & wl <= endwl)]
-  yy <- spectra[which(wl >= startwl & wl <= endwl)]
+  yy <- absorbance[which(wl >= startwl & wl <= endwl)]
 
   #--------------------------------------------
   # Fit the data.

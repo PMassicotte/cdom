@@ -3,4 +3,6 @@
 export(fit_exponential)
 export(slope_ratio)
 export(spectral_curve)
+import(ggplot2)
 import(minpack.lm)
+import(tidyr)

@@ -30,23 +30,23 @@
 #' @examples
 #'data(spectra)
 #'
-#'res <- spectral_curve(spectra$wavelength, spectra$absorbance)
+#'res <- spectral_curve(spectra$wavelength, spectra$spc2)
 #'plot(res$wl, res$s, type = "l")
 
-spectral_curve <- function(wl, spectra, interval = 21, r2threshold = 0.8) {
+spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8) {
 
-  if(length(wl) != length(spectra)){
+  if(length(wl) != length(absorbance)){
     stop("wl and spectra are not of the same length.")
   }
 
-  if(!is.numeric(wl) | !is.numeric(spectra)){
-    stop("wl and spectra need to be numeric.")
+  if(!is.numeric(wl) | !is.numeric(absorbance)){
+    stop("wl and absorbance need to be numeric.")
   }
 
   #--------------------------------------------
   # Resample data by 1 nm increment.
   #--------------------------------------------
-  sf <- splinefun(wl, spectra)
+  sf <- splinefun(wl, absorbance)
 
   xx <- seq(from = min(wl), to = max(wl), by = 1)
   yy <- sf(xx)

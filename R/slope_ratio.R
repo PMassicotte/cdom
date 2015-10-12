@@ -21,23 +21,23 @@
 #'
 #' @examples
 #' data("spectra")
-#' slope_ratio(spectra$wavelength, spectra$absorbance)
+#' slope_ratio(spectra$wavelength, spectra$spc1)
 #'
 
-slope_ratio <- function(wl, spectra) {
+slope_ratio <- function(wl, absorbance) {
 
-  if(length(wl) != length(spectra)){
+  if(length(wl) != length(absorbance)){
     stop("wl and spectra are not of the same length.")
   }
 
-  if(!is.numeric(wl) | !is.numeric(spectra)){
-    stop("wl and spectra need to be numeric.")
+  if(!is.numeric(wl) | !is.numeric(absorbance)){
+    stop("wl and absorbance need to be numeric.")
   }
 
   #--------------------------------------------
   # Get data
   #--------------------------------------------
-  sf <- splinefun(wl, spectra)
+  sf <- splinefun(wl, absorbance)
 
   wl_275_295 <- seq(from = 275, to = 295, length.out = 25)
   wl_350_400 <- seq(from = 350, to = 400, length.out = 25)

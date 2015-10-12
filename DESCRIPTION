@@ -10,4 +10,4 @@ Description: This package provides various wraper functions to model and extract
 License: GPL (>= 2)
 Depends: R (>= 3.0)
 LazyData: TRUE
-Imports: minpack.lm
+Imports: minpack.lm, ggplot2, tidyr
