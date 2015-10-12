@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom)
+
 CDOM
 ====
 

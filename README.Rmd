@@ -18,6 +18,8 @@ library(ggplot2)
 theme_set(theme_bw(base_size = 12, base_family = "Open Sans"))
 ```
 
+[![Travis-CI Build Status](https://travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom)
+
 # CDOM
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM). 
