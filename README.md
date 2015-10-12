@@ -36,19 +36,21 @@ a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
 
 ``` r
 library(cdom)
+library(ggplot2)
+
 data("spectra")
 
 fit <- fit_exponential(wl = spectra$wavelength,
-                       spectra = spectra$absorbance,
+                       absorbance = spectra$spc3,
                        wl0 = 350,
                        startwl = 190,
                        endwl = 900)
 
-ggplot(spectra, aes(x = wavelength, y = absorbance)) +
+ggplot(spectra, aes(x = wavelength, y = spc3)) +
   geom_point() +
   geom_line(aes(y = predict(fit)), col = "red") +
   xlab("Wavelength (nm)") +
-  ylab(expression(paste("Absorbance (", m ^ {-1}, ")")))
+  ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
 ![](README-exponential-1.png)
@@ -62,8 +64,8 @@ The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is
 library(cdom)
 data("spectra")
 
-slope_ratio(spectra$wavelength, spectra$absorbance)
-#> [1] 0.7519547
+slope_ratio(spectra$wavelength, spectra$spc1)
+#> [1] 1.325082
 ```
 
 The spectral curve by Loiselle et al. (2009).
@@ -75,7 +77,10 @@ The `spectral_curve()` function generates the spectral curve using the slope of 
 library(cdom)
 data("spectra")
 
-res <-  spectral_curve(spectra$wavelength, spectra$absorbance)
+res <-  spectral_curve(wl = spectra$wavelength, 
+                       absorbance = spectra$spc10,
+                       interval = 21,
+                       r2threshold = 0.9)
 
 ggplot(res, aes(x = wl, y = s)) +
   geom_line() +
