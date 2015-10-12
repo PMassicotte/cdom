@@ -5,13 +5,13 @@
 CDOM absorbance data.
 }
 \description{
-Simple absorbance used to test package's functions.
+Simple absorbance spectra used to test package's functions.
 }
 \usage{data("spectra")}
 \format{
-  A data frame with 1421 observations on the following 2 variables.
+  A data frame with 711 observations on the following 2 variables.
   \describe{
-    \item{\code{wavelength}}{a numeric vector}
+    \item{\code{wavelength}}{a numeric vector (190-900 nm.)}
     \item{\code{absorbance}}{a numeric vector}
   }
 }
