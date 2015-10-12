@@ -90,6 +90,23 @@ ggplot(res, aes(x = wl, y = s)) +
 
 ![](README-spectral_curve-1.png)
 
+Data
+====
+
+A total 25 absorption spectra are provided in the package.
+
+``` r
+library(ggplot2)
+library(tidyr)
+data("spectra")
+
+spectra <- gather(spectra, sample, absorbance, -wavelength)
+ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
+  geom_line(size = 0.1)
+```
+
+![](README-data-1.png)
+
 References
 ==========
 

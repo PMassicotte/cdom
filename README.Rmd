@@ -102,4 +102,19 @@ ggplot(res, aes(x = wl, y = s)) +
 
 ```
 
+# Data
+
+A total 25 absorption spectra are provided in the package.
+
+```{r data}
+library(ggplot2)
+library(tidyr)
+data("spectra")
+
+spectra <- gather(spectra, sample, absorbance, -wavelength)
+ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
+  geom_line(size = 0.1)
+```
+
+
 # References
