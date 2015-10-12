@@ -3,5 +3,4 @@
 export(fit_exponential)
 export(slope_ratio)
 export(spectral_curve)
-import(dplyr)
 import(minpack.lm)
