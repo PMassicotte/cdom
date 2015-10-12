@@ -7,7 +7,7 @@ The **cdom** package implements various functions used to model and calculate me
 
 This package provides:
 
-1.  Simple wrappers to calculate commonly metrics found in the literature.
+1.  Simple wrappers to calculate common metrics found in the literature.
     -   The **spectral curve** -- Loiselle et al. (2009).
     -   The **slope ratio (Sr)** -- Helms et al. (2008).
     -   The **spectral slope (S)** -- Jerlov (1968).
