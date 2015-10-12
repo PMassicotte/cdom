@@ -35,13 +35,13 @@
 
 spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8) {
 
-  if(length(wl) != length(absorbance)){
-    stop("wl and spectra are not of the same length.")
-  }
-
-  if(!is.numeric(wl) | !is.numeric(absorbance)){
-    stop("wl and absorbance need to be numeric.")
-  }
+  stopifnot(length(wl) == length(absorbance),
+            is.numeric(absorbance),
+            is.numeric(wl),
+            is.vector(wl),
+            is.vector(absorbance),
+            is.numeric(interval),
+            is.numeric(r2threshold))
 
   #--------------------------------------------
   # Resample data by 1 nm increment.

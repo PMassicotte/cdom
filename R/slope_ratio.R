@@ -26,14 +26,11 @@
 
 slope_ratio <- function(wl, absorbance) {
 
-  if(length(wl) != length(absorbance)){
-    stop("wl and spectra are not of the same length.")
-  }
-
-  if(!is.numeric(wl) | !is.numeric(absorbance)){
-    stop("wl and absorbance need to be numeric.")
-  }
-
+  stopifnot(length(wl) == length(absorbance),
+            is.numeric(absorbance),
+            is.numeric(wl),
+            is.vector(wl),
+            is.vector(absorbance))
   #--------------------------------------------
   # Get data
   #--------------------------------------------
