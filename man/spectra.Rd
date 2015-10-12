@@ -17,7 +17,14 @@ Simple absorbance spectra used to test package's functions.
 }
 
 \examples{
-data(spectra)
-plot(spectra$wavelength, spectra$absorbance)
+library(ggplot2)
+library(tidyr)
+
+data("spectra")
+
+spectra <- gather(spectra, sample, absorbance, -wavelength)
+
+ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
+  geom_line(size = 0.1)
 }
 \keyword{datasets}
