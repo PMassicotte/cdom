@@ -27,9 +27,9 @@ The **cdom** package implements various functions used to model and calculate me
 This package provides:
 
 1. Simple wrappers to calculate common metrics found in the literature.
-    + The **spectral curve** -- @Loiselle2009.
-    + The **slope ratio (Sr)** -- @Helms2008.
-    + The **spectral slope (S)** -- @Jerlov1968.
+    + The **spectral curve** -- [@Loiselle2009].
+    + The **slope ratio (Sr)** -- [@Helms2008].
+    + The **spectral slope (S)** -- [@Jerlov1968, @Lundgren1976, @Bricaud1981].
 
 2. The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
@@ -45,7 +45,7 @@ Please note that this is a developing version of the package for testing only. P
 
 ## The spectral slope (S) by @Jerlov1968. 
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968).
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
 
 ```tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -73,7 +73,7 @@ ggplot(spectra, aes(x = wavelength, y = spc3)) +
 
 ## The slope ratio (SR) by @Helms2008.
 
-The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for details.
+The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See @Helms2008 for details.
 
 ```{r sr}
 library(cdom)

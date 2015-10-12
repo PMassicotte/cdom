@@ -8,9 +8,9 @@ The **cdom** package implements various functions used to model and calculate me
 This package provides:
 
 1.  Simple wrappers to calculate common metrics found in the literature.
-    -   The **spectral curve** -- Loiselle et al. (2009).
-    -   The **slope ratio (Sr)** -- Helms et al. (2008).
-    -   The **spectral slope (S)** -- Jerlov (1968).
+    -   The **spectral curve** -- (Loiselle et al. 2009).
+    -   The **slope ratio (Sr)** -- (Helms et al. 2008).
+    -   The **spectral slope (S)** -- (Jerlov 1968, Lundgren (1976), Bricaud, Morel, and Prieur (1981)).
 
 2.  The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
@@ -28,7 +28,7 @@ Examples
 The spectral slope (S) by Jerlov (1968).
 ----------------------------------------
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov et al. (1968).
+The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov (1968), Lundgren (1976), Bricaud, Morel, and Prieur (1981).
 
 ``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -110,8 +110,12 @@ ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
 References
 ==========
 
+Bricaud, Annick, Andr<span>é</span> Morel, and Louis Prieur. 1981. “Absorption by dissolved organic matter of the sea (yellow substance) in the UV and visible domains.” *Limnology and Oceanography* 26 (1): 43–53. doi:[10.4319/lo.1981.26.1.0043](http://dx.doi.org/10.4319/lo.1981.26.1.0043).
+
 Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor, David J. Kieber, and Kenneth Mopper. 2008. “Absorption spectral slopes and slope ratios as indicators of molecular weight, source, and photobleaching of chromophoric dissolved organic matter.” *Limnology and Oceanography* 53 (3): 955–69. doi:[10.4319/lo.2008.53.3.0955](http://dx.doi.org/10.4319/lo.2008.53.3.0955).
 
 Jerlov, N.G. 1968. *Optical oceanography*. New York: Elsevier Publishing Company.
 
 Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci, Antonio Tognazzi, Andres C<span>é</span>zar, and Claudio Rossi. 2009. “The optical characterization of chromophoric dissolved organic matter using wavelength distribution of absorption spectral slopes.” *Limnology and Oceanography* 54 (2): 590–97. doi:[10.4319/lo.2009.54.2.0590](http://dx.doi.org/10.4319/lo.2009.54.2.0590).
+
+Lundgren, Bo. 1976. *Spectral transmittance measurements in the Baltic*. Copenhagen: Institute Physical Oceanography University of Copenhagen.
