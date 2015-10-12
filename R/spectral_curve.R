@@ -81,6 +81,7 @@ spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8) {
 
   ## Filter data to keep only regression with r2 >= r2threshold
   res <- res[res$r2 >= r2threshold, ]
+  res <- na.omit(res)
 
   return(res)
 
