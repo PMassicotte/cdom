@@ -1,5 +1,5 @@
 ---
-bibliography: library.bib
+bibliography: /home/persican/Documents/library.bib
 output:
   md_document:
     variant: markdown_github

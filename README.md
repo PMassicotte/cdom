@@ -92,4 +92,4 @@ Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor, David J. Ki
 
 Jerlov, N.G. 1968. *Optical oceanography*. New York: Elsevier Publishing Company.
 
-Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci, Antonio Tognazzi, Andres Cézar, and Claudio Rossi. 2009. “The optical characterization of chromophoric dissolved organic matter using wavelength distribution of absorption spectral slopes.” *Limnology and Oceanography* 54 (2): 590–97. doi:[10.4319/lo.2009.54.2.0590](http://dx.doi.org/10.4319/lo.2009.54.2.0590).
+Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci, Antonio Tognazzi, Andres C<span>é</span>zar, and Claudio Rossi. 2009. “The optical characterization of chromophoric dissolved organic matter using wavelength distribution of absorption spectral slopes.” *Limnology and Oceanography* 54 (2): 590–97. doi:[10.4319/lo.2009.54.2.0590](http://dx.doi.org/10.4319/lo.2009.54.2.0590).
