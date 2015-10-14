@@ -35,9 +35,8 @@ a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
 ```
 
 ``` r
-library(cdom)
 library(ggplot2)
-
+library(cdom)
 data("spectra")
 
 fit <- fit_exponential(wl = spectra$wavelength,
@@ -71,7 +70,7 @@ slope_ratio(spectra$wavelength, spectra$spc1)
 The spectral curve
 ------------------
 
-The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding windows of 21 nm interval (default) at 1 nm resolution. See Loiselle et al. (2009) for detailed information.
+The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding window of 21 nm interval (default) at 1 nm resolution. See Loiselle et al. (2009) for detailed information.
 
 ``` r
 library(cdom)
