@@ -8,9 +8,9 @@ The **cdom** package implements various functions used to model and calculate me
 This package provides:
 
 1.  Simple wrappers to calculate common metrics found in the literature.
-    -   The **spectral curve** -- (Loiselle et al. 2009).
-    -   The **slope ratio (Sr)** -- (Helms et al. 2008).
-    -   The **spectral slope (S)** -- (Jerlov 1968, Lundgren (1976), Bricaud, Morel, and Prieur (1981)).
+    -   The **spectral curve** (Loiselle et al. 2009).
+    -   The **slope ratio (Sr)** (Helms et al. 2008).
+    -   The **spectral slope (S)** (Jerlov 1968; Lundgren 1976; Bricaud, Morel, and Prieur 1981).
 
 2.  The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
@@ -25,8 +25,8 @@ Please note that this is a developing version of the package for testing only. P
 Examples
 ========
 
-The spectral slope (S) by Jerlov (1968).
-----------------------------------------
+The spectral slope (S)
+----------------------
 
 The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov (1968), Lundgren (1976), Bricaud, Morel, and Prieur (1981).
 
@@ -55,10 +55,10 @@ ggplot(spectra, aes(x = wavelength, y = spc3)) +
 
 ![](README-exponential-1.png)
 
-The slope ratio (SR) by Helms et al. (2008).
---------------------------------------------
+The slope ratio (SR)
+--------------------
 
-The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for details.
+The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for detailed information.
 
 ``` r
 library(cdom)
@@ -68,16 +68,16 @@ slope_ratio(spectra$wavelength, spectra$spc1)
 #> [1] 1.325082
 ```
 
-The spectral curve by Loiselle et al. (2009).
----------------------------------------------
+The spectral curve
+------------------
 
-The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding windows of 21 nm interval (default) at 1 nm resolution.
+The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding windows of 21 nm interval (default) at 1 nm resolution. See Loiselle et al. (2009) for detailed information.
 
 ``` r
 library(cdom)
 data("spectra")
 
-res <-  spectral_curve(wl = spectra$wavelength, 
+res <-  spectral_curve(wl = spectra$wavelength,
                        absorbance = spectra$spc10,
                        interval = 21,
                        r2threshold = 0.9)
