@@ -3,10 +3,11 @@ Type: Package
 Title: R functions to model CDOM spectra
 Version: 0.0.0.9000
 Date: 02-10-2015
-Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk",
-  role = c("aut", "cre"))
+Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk", role = c("aut", "cre"))
 Description: This package provides various wraper functions to model and extract
  CDOM various quantitative information from absorption spectra.
+BugReports: https://github.com/PMassicotte/cdom/issues
+URL: https://github.com/PMassicotte/cdom
 License: GPL (>= 2)
 Depends: R (>= 3.0)
 LazyData: TRUE
