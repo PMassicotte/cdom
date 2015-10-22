@@ -3,26 +3,26 @@
 \docType{data}
 \name{spectra}
 \alias{spectra}
-\title{CDOM absorbance data.}
+\title{CDOM absorption data.}
 \format{A data frame with 711 rows and 26 variables}
 \usage{
 data(spectra)
 }
 \description{
-Simple absorbance spectra used to test package's functions.
+Simple absorption spectra used to test package's functions.
 }
 \details{
 \itemize{
   \item wavelength.  Wavelengths used for measurements (190-900 nm.)
-  \item Absorbance.
+  \item Absorption
 }
 }
 \examples{
 library(ggplot2)
 library(tidyr)
 data("spectra")
-spectra <- gather(spectra, sample, absorbance, -wavelength)
-ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
+spectra <- gather(spectra, sample, absorption, -wavelength)
+ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
  geom_line(size = 0.1)
 }
 \keyword{datasets}

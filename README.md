@@ -79,7 +79,7 @@ data("spectra")
 res <-  spectral_curve(wl = spectra$wavelength,
                        absorbance = spectra$spc10,
                        interval = 21,
-                       r2threshold = 0.9)
+                       r2threshold = 0.98)
 
 ggplot(res, aes(x = wl, y = s)) +
   geom_line() +
@@ -99,9 +99,11 @@ library(ggplot2)
 library(tidyr)
 data("spectra")
 
-spectra <- gather(spectra, sample, absorbance, -wavelength)
-ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
-  geom_line(size = 0.1)
+spectra <- gather(spectra, sample, absorption, -wavelength)
+ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
+  geom_line(size = 0.1) +
+  xlab("Wavelength (nm)") +
+  ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
 ![](README-data-1.png)

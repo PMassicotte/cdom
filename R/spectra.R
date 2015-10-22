@@ -1,10 +1,10 @@
-#' CDOM absorbance data.
+#' CDOM absorption data.
 #'
-#' Simple absorbance spectra used to test package's functions.
+#' Simple absorption spectra used to test package's functions.
 #'
 #' \itemize{
 #'   \item wavelength.  Wavelengths used for measurements (190-900 nm.)
-#'   \item Absorbance.
+#'   \item Absorption
 #' }
 #'
 #' @import ggplot2
@@ -18,7 +18,7 @@
 #' library(ggplot2)
 #' library(tidyr)
 #' data("spectra")
-#' spectra <- gather(spectra, sample, absorbance, -wavelength)
-#' ggplot(spectra, aes(x = wavelength, y = absorbance, group = sample)) +
+#' spectra <- gather(spectra, sample, absorption, -wavelength)
+#' ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
 #'  geom_line(size = 0.1)
 NULL
