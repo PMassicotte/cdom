@@ -18,7 +18,6 @@
 #'
 #' @return The value of the slope ratio.
 #' @export
-#'
 #' @examples
 #' data("spectra")
 #' slope_ratio(spectra$wavelength, spectra$spc1)

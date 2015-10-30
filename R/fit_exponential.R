@@ -19,7 +19,6 @@
 #' @return A list contianing the \code{nls} object and the \code{R2}. NULL if
 #'   the model did not converged.
 #' @export
-#'
 #' @import minpack.lm
 #'
 #' @examples

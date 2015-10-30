@@ -26,7 +26,6 @@
 #'  and the determination coefficient of the linear regression used to claculate
 #'  the slope.
 #'@export
-#'
 #' @examples
 #'data(spectra)
 #'
