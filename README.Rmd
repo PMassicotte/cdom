@@ -101,9 +101,10 @@ data("spectra")
 res <-  cdom_spectral_curve(wl = spectra$wavelength,
                        absorbance = spectra$spc10,
                        interval = 21,
-                       r2threshold = 0.98)
+                       r2threshold = 0.98) ## Maybe to restrictive...
 
 ggplot(res, aes(x = wl, y = s)) +
+  geom_point() +
   geom_line() +
   xlab("Wavelength (nm)") +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
