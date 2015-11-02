@@ -58,7 +58,7 @@ cdom_spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8
   #--------------------------------------------
   # Calculate the spectral slope.
   #--------------------------------------------
-  n <- max(xx) - interval
+  n <- max(xx) - min(xx) - interval + 1
 
   res <- data.frame(wl = rep(NA, n), s = rep(NA, n), r2 = rep(NA, n))
 
