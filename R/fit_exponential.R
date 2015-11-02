@@ -26,13 +26,13 @@
 #'
 #' data(spectra)
 #'
-#' fit <- fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
+#' fit <- cdom_fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 #' summary(fit)
 #'
 #' plot(spectra$wavelength, spectra$spc1)
 #' lines(spectra$wavelength, predict(fit), col = "red")
 
-fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
+cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
 
   stopifnot(length(wl) == length(absorbance),
             is.numeric(absorbance),

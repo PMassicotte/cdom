@@ -12,7 +12,7 @@
 #'@description Calculate the spectral curve of CDOM spectra has proposed by
 #'  Loiselle et al. 2009.
 #'
-#'@inheritParams fit_exponential
+#'@inheritParams cdom_fit_exponential
 #'
 #'@param interval The interval used to claculate each slope (default = 21 nm).
 #'
@@ -29,10 +29,10 @@
 #' @examples
 #'data(spectra)
 #'
-#'res <- spectral_curve(spectra$wavelength, spectra$spc2)
+#'res <- cdom_spectral_curve(spectra$wavelength, spectra$spc2)
 #'plot(res$wl, res$s, type = "l")
 
-spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8) {
+cdom_spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8) {
 
   stopifnot(length(wl) == length(absorbance),
             is.numeric(absorbance),

@@ -14,16 +14,17 @@
 #'
 #' @references \url{http://www.aslo.org/lo/toc/vol_53/issue_3/0955.html}
 #'
-#' @inheritParams fit_exponential
+#' @inheritParams cdom_fit_exponential
 #'
 #' @return The value of the slope ratio.
 #' @export
 #' @examples
 #' data("spectra")
-#' slope_ratio(spectra$wavelength, spectra$spc1)
+#'
+#' cdom_slope_ratio(spectra$wavelength, spectra$spc1)
 #'
 
-slope_ratio <- function(wl, absorbance) {
+cdom_slope_ratio <- function(wl, absorbance) {
 
   stopifnot(length(wl) == length(absorbance),
             is.numeric(absorbance),

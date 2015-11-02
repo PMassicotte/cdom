@@ -43,11 +43,18 @@ devtools::install_github("PMassicotte/cdom")
 
 Please note that this is a developing version of the package for testing only. Please fill an issue when you find bugs.
 
+All functions from the package start with the `cdom_` prefix.
+
+```{r}
+library(cdom)
+ls("package:cdom")
+```
+
 # Examples
 
 ## The spectral slope (S)
 
-The `fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
+The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
 
 ```tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -58,7 +65,7 @@ library(ggplot2)
 library(cdom)
 data("spectra")
 
-fit <- fit_exponential(wl = spectra$wavelength,
+fit <- cdom_fit_exponential(wl = spectra$wavelength,
                        absorbance = spectra$spc3,
                        wl0 = 350,
                        startwl = 190,
@@ -74,24 +81,24 @@ ggplot(spectra, aes(x = wavelength, y = spc3)) +
 
 ## The slope ratio (SR)
 
-The `slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See @Helms2008 for detailed information.
+The `cdom_slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See @Helms2008 for detailed information.
 
 ```{r sr}
 library(cdom)
 data("spectra")
 
-slope_ratio(spectra$wavelength, spectra$spc1)
+cdom_slope_ratio(spectra$wavelength, spectra$spc1)
 ```
 
 ## The spectral curve
 
-The `spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding window of 21 nm interval (default) at 1 nm resolution. See @Loiselle2009 for detailed information.
+The `cdom_spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding window of 21 nm interval (default) at 1 nm resolution. See @Loiselle2009 for detailed information.
 
 ```{r spectral_curve}
 library(cdom)
 data("spectra")
 
-res <-  spectral_curve(wl = spectra$wavelength,
+res <-  cdom_spectral_curve(wl = spectra$wavelength,
                        absorbance = spectra$spc10,
                        interval = 21,
                        r2threshold = 0.98)
@@ -113,6 +120,7 @@ library(tidyr)
 data("spectra")
 
 spectra <- gather(spectra, sample, absorption, -wavelength)
+
 ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   geom_line(size = 0.1) +
   xlab("Wavelength (nm)") +
