@@ -69,8 +69,8 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
     {
       fit <- nlsLM(yy ~ a0 * exp(-S*(xx - wl0)) + K,
                    start = c(S = 0.02, K = 0.01, a0 = a0),
-                   lower = c(S = 0, K = -2, a0 = 0),
-                   upper = c(S = 1, K = 2, a0 = max(yy)),
+                   lower = c(S = 0, K = -Inf, a0 = 0),
+                   upper = c(S = 1, K = Inf, a0 = max(yy)),
                    control = control)
 
       fit$R2 <- 1 - sum((yy - predict(fit))^2) / (length(yy) * var(yy))
