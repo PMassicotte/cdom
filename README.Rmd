@@ -18,7 +18,7 @@ library(ggplot2)
 theme_set(theme_bw(base_size = 12, base_family = "Open Sans"))
 ```
 
-# cdom [![Travis-CI Build Status](https://travis-ci.org/PMassicotte/gtrendsR.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html|
+## cdom [![Travis-CI Build Status](https://api.travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/cdom)](http://cran.rstudio.com/package=cdom) [![Downloads](http://cranlogs.r-pkg.org/badges/cdom?color=brightgreen)](http://www.r-pkg.org/pkg/cdom)
 
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM).
@@ -98,7 +98,7 @@ data("spectra")
 res <-  cdom_spectral_curve(wl = spectra$wavelength,
                        absorbance = spectra$spc10,
                        interval = 21,
-                       r2threshold = 0.98) ## Maybe to restrictive...
+                       r2threshold = 0.98) # Maybe to restrictive...
 
 ggplot(res, aes(x = wl, y = s)) +
   geom_point() +
