@@ -15,7 +15,8 @@ LazyData: TRUE
 Imports:
     minpack.lm,
     ggplot2,
-    tidyr
+    tidyr,
+    broom
 RoxygenNote: 5.0.1
 Suggests:
     eemR

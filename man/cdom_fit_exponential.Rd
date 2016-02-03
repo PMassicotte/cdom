@@ -18,8 +18,14 @@ cdom_fit_exponential(wl, absorbance, wl0 = 350, startwl, endwl)
 \item{endwl}{The ending wavelength (ex.: 600).}
 }
 \value{
-A list contianing the \code{nls} object and the \code{R2}. NULL if
-  the model did not converged.
+A list containing:
+\describe{
+  \item{params}{A data frame with values of fitted parameters.}
+  \item{r2}{R2 of the nls model.}
+  \item{data}{A data frame with fitted (predicted) values of the model.}
+}
+
+The function will return \code{NULL} if the model did not converged.
 }
 \description{
 Fit an exponential model to CDOM data.
@@ -33,9 +39,9 @@ Fit an exponential model to CDOM data.
 data(spectra)
 
 fit <- cdom_fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
-summary(fit)
+str(fit)
 
 plot(spectra$wavelength, spectra$spc1)
-lines(spectra$wavelength, predict(fit), col = "red")
+lines(spectra$wavelength, fit$data$.fitted, col = "red")
 }
 
