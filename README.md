@@ -1,7 +1,5 @@
-| **OS**      | **Build status**                                                                                                                                                         |
-|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Linux & Mac | [![Travis-CI Build Status](https://travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom)                                            |
-| Windows     | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) |
+cdom [![Travis-CI Build Status](https://travis-ci.org/PMassicotte/gtrendsR.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) \[![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)\](<http://www.gnu.org/licenses/gpl-2.0.html>|
+========================================================================================================================================================================================================================================================================================================================================================================================================================================================================
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM).
 
@@ -56,12 +54,12 @@ fit <- cdom_fit_exponential(wl = spectra$wavelength,
 
 ggplot(spectra, aes(x = wavelength, y = spc3)) +
   geom_point() +
-  geom_line(aes(y = predict(fit)), col = "red") +
+  geom_line(aes(y = fit$data$.fitted), col = "red") +
   xlab("Wavelength (nm)") +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](README-exponential-1.png)
+![](README-exponential-1.png)<!-- -->
 
 The slope ratio (SR)
 --------------------
@@ -97,7 +95,7 @@ ggplot(res, aes(x = wl, y = s)) +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 ```
 
-![](README-spectral_curve-1.png)
+![](README-spectral_curve-1.png)<!-- -->
 
 Data
 ====
@@ -117,17 +115,17 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](README-data-1.png)
+![](README-data-1.png)<!-- -->
 
 References
 ==========
 
-Bricaud, Annick, André Morel, and Louis Prieur. 1981. “Absorption by dissolved organic matter of the sea (yellow substance) in the UV and visible domains.” *Limnology and Oceanography* 26 (1): 43–53. [doi:10.4319/lo.1981.26.1.0043](http://doi.org/10.4319/lo.1981.26.1.0043).
+Bricaud, Annick, André Morel, and Louis Prieur. 1981. “Absorption by dissolved organic matter of the sea (yellow substance) in the UV and visible domains.” *Limnology and Oceanography* 26 (1): 43–53. doi:[10.4319/lo.1981.26.1.0043](https://doi.org/10.4319/lo.1981.26.1.0043).
 
-Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor, David J. Kieber, and Kenneth Mopper. 2008. “Absorption spectral slopes and slope ratios as indicators of molecular weight, source, and photobleaching of chromophoric dissolved organic matter.” *Limnology and Oceanography* 53 (3): 955–69. [doi:10.4319/lo.2008.53.3.0955](http://doi.org/10.4319/lo.2008.53.3.0955).
+Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor, David J. Kieber, and Kenneth Mopper. 2008. “Absorption spectral slopes and slope ratios as indicators of molecular weight, source, and photobleaching of chromophoric dissolved organic matter.” *Limnology and Oceanography* 53 (3): 955–69. doi:[10.4319/lo.2008.53.3.0955](https://doi.org/10.4319/lo.2008.53.3.0955).
 
 Jerlov, N.G. 1968. *Optical oceanography*. New York: Elsevier Publishing Company.
 
-Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci, Antonio Tognazzi, Andres Cézar, and Claudio Rossi. 2009. “The optical characterization of chromophoric dissolved organic matter using wavelength distribution of absorption spectral slopes.” *Limnology and Oceanography* 54 (2): 590–97. [doi:10.4319/lo.2009.54.2.0590](http://doi.org/10.4319/lo.2009.54.2.0590).
+Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci, Antonio Tognazzi, Andres Cézar, and Claudio Rossi. 2009. “The optical characterization of chromophoric dissolved organic matter using wavelength distribution of absorption spectral slopes.” *Limnology and Oceanography* 54 (2): 590–97. doi:[10.4319/lo.2009.54.2.0590](https://doi.org/10.4319/lo.2009.54.2.0590).
 
 Lundgren, Bo. 1976. “Spectral transmittance measurements in the Baltic.” Copenhagen: Institute Physical Oceanography University of Copenhagen.

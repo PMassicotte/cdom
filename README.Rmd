@@ -18,10 +18,7 @@ library(ggplot2)
 theme_set(theme_bw(base_size = 12, base_family = "Open Sans"))
 ```
 
-| **OS** 	| **Build status** 	|
-|-------------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| Linux & Mac 	| [![Travis-CI Build Status](https://travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) 	|
-| Windows 	| [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&amp;svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) 	|
+# cdom [![Travis-CI Build Status](https://travis-ci.org/PMassicotte/gtrendsR.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html|
 
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM).
@@ -73,7 +70,7 @@ fit <- cdom_fit_exponential(wl = spectra$wavelength,
 
 ggplot(spectra, aes(x = wavelength, y = spc3)) +
   geom_point() +
-  geom_line(aes(y = predict(fit)), col = "red") +
+  geom_line(aes(y = fit$data$.fitted), col = "red") +
   xlab("Wavelength (nm)") +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 
