@@ -61,7 +61,7 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
   #--------------------------------------------
   # Extract CDOM data based on user inputs.
   #--------------------------------------------
-  wl <- wl[which(wl >= startwl & wl <= endwl)]
+  x <- wl[which(wl >= startwl & wl <= endwl)]
   y <- absorbance[which(wl >= startwl & wl <= endwl)]
 
   #--------------------------------------------
@@ -74,7 +74,7 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
 
   out <- tryCatch(
     {
-      fit <- nlsLM(y ~ a0 * exp(-S * (wl - wl0)) + K,
+      fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
                    start = c(S = 0.02, K = 0.01, a0 = a0),
                    lower = c(S = 0, K = -Inf, a0 = 0),
                    upper = c(S = 1, K = Inf, a0 = max(y)),
