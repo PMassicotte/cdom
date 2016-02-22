@@ -52,6 +52,7 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
 
   if(missing(startwl)){startwl = min(wl)}
   if(missing(endwl)){endwl = max(wl)}
+
   #--------------------------------------------
   # Get a0 value.
   #--------------------------------------------
@@ -72,7 +73,7 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
                   maxiter = 1024,
                   maxfev = 600)
 
-  out <- tryCatch(
+  tryCatch(
     {
       fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
                    start = c(S = 0.02, K = 0.01, a0 = a0),
