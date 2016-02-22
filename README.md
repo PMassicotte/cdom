@@ -27,8 +27,8 @@ All functions from the package start with the `cdom_` prefix.
 ``` r
 library(cdom)
 ls("package:cdom")
-#> [1] "cdom_fit_exponential" "cdom_slope_ratio"     "cdom_spectral_curve" 
-#> [4] "spectra"
+## [1] "cdom_fit_exponential" "cdom_slope_ratio"     "cdom_spectral_curve" 
+## [4] "spectra"
 ```
 
 Examples
@@ -61,7 +61,7 @@ ggplot(spectra, aes(x = wavelength, y = spc3)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](README-exponential-1.png)<!-- -->
+![](inst/images/README-exponential-1.png)<!-- -->
 
 The slope ratio (SR)
 --------------------
@@ -73,7 +73,7 @@ library(cdom)
 data("spectra")
 
 cdom_slope_ratio(spectra$wavelength, spectra$spc1)
-#> [1] 1.325082
+## [1] 1.325082
 ```
 
 The spectral curve
@@ -97,7 +97,7 @@ ggplot(res, aes(x = wl, y = s)) +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 ```
 
-![](README-spectral_curve-1.png)<!-- -->
+![](inst/images/README-spectral_curve-1.png)<!-- -->
 
 Data
 ====
@@ -117,32 +117,32 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](README-data-1.png)<!-- -->
+![](inst/images/README-data-1.png)<!-- -->
 
 How to cite the package
 =======================
 
 ``` r
 citation("cdom")
-#> 
-#> To cite cdom in publications use:
-#> 
-#>   Massicotte, P., and Markager, S. (2016). Using a Gaussian
-#>   decomposition approach to model absorption spectra of
-#>   chromophoric dissolved organic matter. Mar. Chem. 180, 24-32.
-#>   doi:10.1016/j.marchem.2016.01.008.
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Article{,
-#>     title = {Using a Gaussian decomposition approach to model absorption spectra of chromophoric dissolved organic matter},
-#>     author = {Philippe Massicotte and Stiig Markager},
-#>     journal = {Marine Chemistry},
-#>     year = {2016},
-#>     volume = {180},
-#>     pages = {24--32},
-#>     url = {http://linkinghub.elsevier.com/retrieve/pii/S0304420316300081},
-#>   }
+## 
+## To cite cdom in publications use:
+## 
+##   Massicotte, P., and Markager, S. (2016). Using a Gaussian
+##   decomposition approach to model absorption spectra of
+##   chromophoric dissolved organic matter. Mar. Chem. 180, 24-32.
+##   doi:10.1016/j.marchem.2016.01.008.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Article{,
+##     title = {Using a Gaussian decomposition approach to model absorption spectra of chromophoric dissolved organic matter},
+##     author = {Philippe Massicotte and Stiig Markager},
+##     journal = {Marine Chemistry},
+##     year = {2016},
+##     volume = {180},
+##     pages = {24--32},
+##     url = {http://linkinghub.elsevier.com/retrieve/pii/S0304420316300081},
+##   }
 ```
 
 References
