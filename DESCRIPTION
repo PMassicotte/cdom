@@ -4,8 +4,8 @@ Title: R Functions to Model CDOM Spectra
 Version: 0.0.0.9000
 Date: 2015-11-20
 Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk", role = c("aut", "cre"))
-Description: Wraper functions to model and extract CDOM various quantitative
-    information from absorption spectra.
+Description: Wraper functions to model and extract various quantitative
+    information from CDOM absorption spectra.
 BugReports: https://github.com/PMassicotte/cdom/issues
 URL: https://github.com/PMassicotte/cdom
 License: GPL (>= 2)
