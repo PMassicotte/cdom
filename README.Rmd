@@ -1,8 +1,8 @@
 ---
 bibliography: /home/persican/Documents/library.bib
 output:
-  md_document:
-    variant: markdown_github
+  github_document:
+    html_preview: true
 ---
 
 ```{r, echo = FALSE}
@@ -124,5 +124,12 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   xlab("Wavelength (nm)") +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
+
+# How to cite the package
+
+```{r}
+citation("cdom")
+```
+
 
 # References

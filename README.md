@@ -1,3 +1,4 @@
+
 cdom [![Travis-CI Build Status](https://api.travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/cdom)](http://cran.rstudio.com/package=cdom) [![Downloads](http://cranlogs.r-pkg.org/badges/cdom?color=brightgreen)](http://www.r-pkg.org/pkg/cdom)
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -116,6 +117,32 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
 ```
 
 ![](README-data-1.png)<!-- -->
+
+How to cite the package
+=======================
+
+``` r
+citation("cdom")
+#> 
+#> To cite cdom in publications use:
+#> 
+#>   Massicotte, P., and Markager, S. (2016). Using a Gaussian
+#>   decomposition approach to model absorption spectra of
+#>   chromophoric dissolved organic matter. Mar. Chem. 180, 24-32.
+#>   doi:10.1016/j.marchem.2016.01.008.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{,
+#>     title = {Using a Gaussian decomposition approach to model absorption spectra of chromophoric dissolved organic matter},
+#>     author = {Philippe Massicotte and Stiig Markager},
+#>     journal = {Marine Chemistry},
+#>     year = {2016},
+#>     volume = {180},
+#>     pages = {24--32},
+#>     url = {http://linkinghub.elsevier.com/retrieve/pii/S0304420316300081},
+#>   }
+```
 
 References
 ==========
