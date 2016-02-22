@@ -1,7 +1,7 @@
 Package: cdom
 Type: Package
 Title: R Functions to Model CDOM Spectra
-Version: 0.0.1
+Version: 0.1.0
 Date: 2016-02-22
 Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk", role = c("aut", "cre"))
 Description: Wraper functions to model and extract various quantitative
