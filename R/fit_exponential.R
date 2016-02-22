@@ -27,6 +27,7 @@
 #' @export
 #' @import minpack.lm
 #' @importFrom broom tidy augment
+#' @importFrom stats splinefun predict var coef lm na.omit
 #'
 #' @examples
 #' # Fit an exponential model using the reference wavelength 350 between 190 and 900 nm.
