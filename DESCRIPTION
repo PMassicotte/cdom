@@ -15,7 +15,13 @@ Imports:
     minpack.lm,
     ggplot2,
     tidyr,
-    broom
+    broom,
+    signal,
+    neldermead,
+    optimbase,
+    gsubfn,
+    proto,
+    Hmisc
 RoxygenNote: 5.0.1
 Suggests:
     eemR

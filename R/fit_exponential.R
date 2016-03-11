@@ -1,10 +1,7 @@
-#<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-# FILE:         fit_exponential.R
-#
-# AUTHOR:       Philippe Massicotte
-#
-# DESCRIPTION:  Fit an exponential curve to CDOM data.
-#<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+# <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+# FILE: fit_exponential.R AUTHOR: Philippe Massicotte
+# DESCRIPTION: Fit an exponential curve to CDOM data.
+# <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #' Fit an exponential model to CDOM data.
 #'
@@ -38,72 +35,74 @@
 #' str(fit)
 #'
 #' plot(spectra$wavelength, spectra$spc1)
-#' lines(spectra$wavelength, fit$data$.fitted, col = "red")
+#' lines(spectra$wavelength, fit$data$.fitted, col = 'red')
 
-cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
+cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl,
+  endwl) {
 
-  stopifnot(length(wl) == length(absorbance),
-            is.numeric(absorbance),
-            is.numeric(wl),
-            is.vector(wl),
-            is.vector(absorbance),
-            is.numeric(wl0),
-            is.numeric(startwl),
-            is.numeric(endwl))
+  stopifnot(length(wl) == length(absorbance), is.numeric(absorbance),
+    is.numeric(wl), is.vector(wl), is.vector(absorbance),
+    is.numeric(wl0), is.numeric(startwl), is.numeric(endwl))
 
-  if(missing(startwl)){startwl = min(wl)}
-  if(missing(endwl)){endwl = max(wl)}
+  if (missing(startwl)) {
+    startwl = min(wl)
+  }
+  if (missing(endwl)) {
+    endwl = max(wl)
+  }
 
-  #--------------------------------------------
+  # ---------------------------------------------------------------------
   # Get a0 value.
-  #--------------------------------------------
+  # ---------------------------------------------------------------------
   sf <- splinefun(wl, absorbance)
   a0 <- sf(wl0)
 
-  #--------------------------------------------
+  # ---------------------------------------------------------------------
   # Extract CDOM data based on user inputs.
-  #--------------------------------------------
+  # ---------------------------------------------------------------------
   x <- wl[which(wl >= startwl & wl <= endwl)]
   y <- absorbance[which(wl >= startwl & wl <= endwl)]
 
-  #--------------------------------------------
+  # ---------------------------------------------------------------------
   # Fit the data.
-  #--------------------------------------------
+  # ---------------------------------------------------------------------
   control <- list(minFactor = 1e-10,
                   warnOnly = FALSE,
-                  maxiter = 1024,
-                  maxfev = 600)
+                  maxiter = 400,
+                  maxfev = 400)
 
-  tryCatch(
-    {
-      fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
-                   start = c(S = 0.02, K = 0.01, a0 = a0),
-                   lower = c(S = 0, K = -Inf, a0 = 0),
-                   upper = c(S = 1, K = Inf, a0 = max(y)),
-                   control = control)
+  tryCatch({
 
-      r2 <- 1 - sum((y - predict(fit))^2) / (length(y) * var(y))
+    fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
+                 start = c(S = 0.02, K = 0.01, a0 = a0),
+                 lower = c(S = 0, K = -Inf, a0 = 0),
+                 upper = c(S = 1, K = Inf, a0 = max(y)),
+                 control = control)
 
-      return(list(params = tidy(fit), r2 = r2, data = augment(fit)))
+    r2 <- 1 - sum((y - predict(fit))^2) / (length(y) * var(y))
 
-    }, error = function(cond) {
+    res <- list(params = tidy(fit), r2 = r2, data = augment(fit), model = fit)
+    #class(res) <- "cdom"
 
-      message("Error in fit_exponential() when trying to fit. Check your data.")
-      message(cond)
+    return(res)
 
-      # Choose a return value in case of error
-      return(NULL)
+  }, error = function(cond) {
 
-    },warning = function(cond) {
+    message("Error in fit_exponential() when trying to fit. Check your data.")
+    message(cond)
 
-      message(cond)
-      message("Warning in fit_exponential().")
+    # Choose a return value in case of error
+    return(NULL)
 
-      # Choose a return value in case of warning
-      return(NULL)
+  }, warning = function(cond) {
 
-    },finally = {
+    message(cond)
+    message("Warning in fit_exponential().")
 
-    }
-  )
+    # Choose a return value in case of warning
+    return(NULL)
+
+  }, finally = {
+
+  })
 }
