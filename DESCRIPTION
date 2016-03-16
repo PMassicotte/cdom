@@ -1,7 +1,7 @@
 Package: cdom
 Type: Package
 Title: R Functions to Model CDOM Spectra
-Version: 0.1.0
+Version: 0.1.0.9000
 Date: 2016-02-22
 Authors@R: person("Philippe", "Massicotte", email = "pm@bios.au.dk", role = c("aut", "cre"))
 Description: Wrapper functions to model and extract various quantitative information from absorption spectra of chromophoric dissolved organic matter (CDOM).

@@ -74,36 +74,30 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
                   maxiter = 1024,
                   maxfev = 600)
 
-  tryCatch(
-    {
-      fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
-                   start = c(S = 0.02, K = 0.01, a0 = a0),
-                   lower = c(S = 0, K = -Inf, a0 = 0),
-                   upper = c(S = 1, K = Inf, a0 = max(y)),
-                   control = control)
+  res <- try({
+
+    fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
+                 start = c(S = 0.02, K = 0.01, a0 = a0),
+                 lower = c(S = 0, K = -Inf, a0 = 0),
+                 upper = c(S = 1, K = Inf, a0 = max(y)),
+                 control = control)
 
       r2 <- 1 - sum((y - predict(fit))^2) / (length(y) * var(y))
 
       return(list(params = tidy(fit), r2 = r2, data = augment(fit)))
 
-    }, error = function(cond) {
+  }, silent = TRUE)
 
-      message("Error in fit_exponential() when trying to fit. Check your data.")
-      message(cond)
 
-      # Choose a return value in case of error
-      return(NULL)
+  # Print the error
+  warning(res, call. = FALSE)
 
-    },warning = function(cond) {
+  params <- data.frame(matrix(nrow = 3, ncol = 5))
+  names(params) <- c("term", "estimate", "std.error", "statistic", "p.value")
 
-      message(cond)
-      message("Warning in fit_exponential().")
+  data <- data.frame(x = x, y = y, wl0 = wl0, .fitted = NA, .resid = NA)
 
-      # Choose a return value in case of warning
-      return(NULL)
-
-    },finally = {
-
-    }
-  )
+  return(list(params = params,
+              r2 = NA,
+              data = data))
 }
