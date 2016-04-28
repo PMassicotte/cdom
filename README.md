@@ -26,12 +26,99 @@ All functions from the package start with the `cdom_` prefix.
 ``` r
 library(cdom)
 ls("package:cdom")
-## [1] "cdom_fit_exponential" "cdom_slope_ratio"     "cdom_spectral_curve" 
-## [4] "spectra"
+## [1] "build_model"          "cdom_fit_exponential" "cdom_slope_ratio"    
+## [4] "cdom_spectral_curve"  "fitCDOMcomponents"    "spectra"
 ```
 
 Examples
 ========
+
+Gaussian decomposition
+----------------------
+
+**This should be used with care since it is in very early developpement.**
+
+``` r
+library(dplyr)
+## 
+## Attaching package: 'dplyr'
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+library(gsubfn)
+## Loading required package: proto
+
+set.seed(1234)
+
+wl <- seq(190, 700, length.out = 200)
+
+# Build the base exp model
+a0  <- 10
+S <- 0.02
+K <- 0
+
+exp_part <- a0 * exp(-S * (wl - 350)) + K
+exp_part <- exp_part + rnorm(wl, sd = 0.001)
+
+# Build 3 Gaussian components
+p0 <- c(43, 60, 70)
+p1 <- c(250, 350, 400)
+p2 <- c(10, 22, 15)
+
+params <- c(a0, S, K, as.vector(rbind(p0, p1, p2)))
+ngaussian <- (length(params) - 3) / 3
+n <- c("a0", "S", "K", paste0(rep(c("p0", "p1", "p2"), time = ngaussian),
+       rep(letters[1:ngaussian], each = 3)))
+params <- setNames(params, n)
+
+myfunc <- build_model(ngaussian = ngaussian)
+
+fo <- formula(sub(".*~", "~", deparse(myfunc)))
+func <- gsubfn::fn$identity(fo)
+spc <- do.call(func, c(list(x = wl), params))
+
+# Plot a preview
+
+plot(wl, spc, type = "l")
+```
+
+![](inst/images/README-unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+
+# Decompose the generated spectra
+
+myfit <- fitCDOMcomponents(x = wl, y = spc, min_distance = 50) %>%
+  mutate(true_value = params) %>%
+  select(parameter, true_value, guess, nls)
+## Estimated number of components: 3
+```
+
+![](inst/images/README-unnamed-chunk-3-2.png)<!-- -->![](inst/images/README-unnamed-chunk-3-3.png)<!-- -->
+
+``` r
+
+myfit
+## Source: local data frame [12 x 4]
+## 
+##    parameter true_value        guess          nls
+##        (chr)      (dbl)        (dbl)        (dbl)
+## 1         a0      10.00  68.68442198   9.04811590
+## 2          K       0.02   0.02921391   0.00000000
+## 3          S       0.00   0.02000000   0.02065551
+## 4        p0a      43.00  25.32752720  38.32015999
+## 5        p1a     250.00 236.13065327 249.95115962
+## 6        p2a      10.00   2.56281407  13.22924763
+## 7        p0b      60.00  60.10952679  58.94969680
+## 8        p1b     350.00 348.89447236 349.58230837
+## 9        p2b      22.00   3.07537688  23.10931359
+## 10       p0c      70.00  71.61019071  65.78835127
+## 11       p1c     400.00 397.58793970 399.94114070
+## 12       p2c      15.00   2.81909548  16.27522071
+```
 
 The spectral slope (S)
 ----------------------

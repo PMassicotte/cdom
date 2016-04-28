@@ -42,6 +42,6 @@ fit <- cdom_fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 str(fit)
 
 plot(spectra$wavelength, spectra$spc1)
-lines(spectra$wavelength, fit$data$.fitted, col = "red")
+lines(spectra$wavelength, fit$data$.fitted, col = 'red')
 }
 

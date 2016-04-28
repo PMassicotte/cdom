@@ -48,6 +48,57 @@ ls("package:cdom")
 
 # Examples
 
+## Gaussian decomposition
+
+**This should be used with care since it is in very early developpement.**
+
+ 
+```{r}
+library(dplyr)
+library(gsubfn)
+
+set.seed(1234)
+
+wl <- seq(190, 700, length.out = 200)
+
+# Build the base exp model
+a0  <- 10
+S <- 0.02
+K <- 0
+
+exp_part <- a0 * exp(-S * (wl - 350)) + K
+exp_part <- exp_part + rnorm(wl, sd = 0.001)
+
+# Build 3 Gaussian components
+p0 <- c(43, 60, 70)
+p1 <- c(250, 350, 400)
+p2 <- c(10, 22, 15)
+
+params <- c(a0, S, K, as.vector(rbind(p0, p1, p2)))
+ngaussian <- (length(params) - 3) / 3
+n <- c("a0", "S", "K", paste0(rep(c("p0", "p1", "p2"), time = ngaussian),
+       rep(letters[1:ngaussian], each = 3)))
+params <- setNames(params, n)
+
+myfunc <- build_model(ngaussian = ngaussian)
+
+fo <- formula(sub(".*~", "~", deparse(myfunc)))
+func <- gsubfn::fn$identity(fo)
+spc <- do.call(func, c(list(x = wl), params))
+
+# Plot a preview
+
+plot(wl, spc, type = "l")
+
+# Decompose the generated spectra
+
+myfit <- fitCDOMcomponents(x = wl, y = spc, min_distance = 50) %>%
+  mutate(true_value = params) %>%
+  select(parameter, true_value, guess, nls)
+
+myfit
+```
+
 ## The spectral slope (S)
 
 The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
