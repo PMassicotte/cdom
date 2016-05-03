@@ -129,7 +129,7 @@ find_segment <- function(df, merge = TRUE, min_distance) {
 merge_segment <- function(segment, min_distance) {
 
   res <- segment %>%
-    group_by(rising) %>%
+    group_by(rising, segment) %>%
     nest() %>%
     mutate(end_pos = purrr::map(data, ~max(.$x))) %>%
     unnest(end_pos)
