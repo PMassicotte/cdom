@@ -98,7 +98,7 @@ find_segment <- function(df, merge = TRUE, min_distance) {
   pred1 <- predict(spl, x = df$x, deriv = 1)
   deriv1 <- pred1$y
 
-  rising <- c(ifelse(diff(deriv1) > 0, TRUE, FALSE), FALSE)
+  rising <- c(ifelse(diff(deriv1) > 0, TRUE, FALSE), NA)
 
   myrle <- rle(rising)
 
@@ -188,7 +188,7 @@ find_initial <- function(spectra, segment) {
 
   p0 <- segment$p0
   p1 <- segment$p1
-  p2 <- segment$p2 / 10 # Find a better way
+  p2 <- segment$p2 / 2 # Find a better way
 
   starting_gaussian <- as.vector(rbind(p0, p1, p2))
   gaussian_name <- paste0(rep(c("p0", "p1", "p2"), time = ngaussian),
@@ -265,6 +265,7 @@ fitCDOMcomponents <- function(x, y, filter = TRUE, min_distance) {
   message(sprintf("Estimated number of components: %d\n", ngaussian))
 
   starting_values <- find_initial(spectra, segment)
+  lower_values <- set_lower(starting_values)
 
   # *************************************************************************
   # Build model equation.
@@ -305,12 +306,13 @@ fitCDOMcomponents <- function(x, y, filter = TRUE, min_distance) {
   fit <- tryCatch(
     minpack.lm::nlsLM(formula = myfunc,
           start = starting_values,
-          lower = starting_values - starting_values,
+          lower = lower_values,
           #upper = starting_values * 1.5,
           data = data.frame(y = spectra$y, x = spectra$x),
           control = list(maxiter = maxit, maxfev = 1000)),
     error = function(e) NULL,  warning = function(e) NULL)
 
+  data_frame(params = names(starting_values), coef(fit), starting_values, lower_values)
 
   # fo <- formula(sub(".*~", "~", deparse(myfunc)))
   # func <- gsubfn::fn$identity(fo)
@@ -348,4 +350,35 @@ guess_ngaussian <- function(segment) {
   segment <- filter(segment, integral >= mean(integral))
   return(segment)
   # ngaussian <- which(segment$integral > mean(segment$integral))
+}
+
+# *************************************************************************
+# Set lower bounds to starting guesses.
+# *************************************************************************
+set_lower <- function(starting_values, segment) {
+
+  lower_values <- starting_values
+
+  # Minimum values for the exponential parameters
+  index <- grepl("S", names(starting_values))
+  lower_values[index] <- 0.001
+
+  index <- grepl("K", names(starting_values))
+  lower_values[index] <- -starting_values[index]
+
+  index <- grepl("a0", names(starting_values))
+  lower_values[index] <- starting_values[index] * 0.05
+
+  # Minimum values for Gaussian parameters
+  index <- grepl("p0", names(starting_values))
+  lower_values[index] <- starting_values[index] * 0.95
+
+  index <- grepl("p1", names(starting_values))
+  lower_values[index] <- starting_values[index] * 0.95
+
+  index <- grepl("p2", names(starting_values))
+  lower_values[index] <- starting_values[index] * 0.15
+
+  return(lower_values)
+
 }
