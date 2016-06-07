@@ -44,7 +44,15 @@ extract_outlier <- function(x, y){
 
       ## Do not attempt to model data if not "enough" observations.
       if(length(xx) < 50) {
-        return(y - predict(fit$model, newdata = list(x = x)))
+
+        outlier <- y - predict(fit$model, newdata = list(x = x))
+
+        exponential_coef <- setNames(as.vector(coef(fit$model)),
+                                     names(coef(fit$model)))
+
+        df <- list(outlier = outlier , exponential_coef = exponential_coef)
+
+        return(df)
         # return(list(x = xx, y = yy, model = fit$model))
       }
 
@@ -54,7 +62,14 @@ extract_outlier <- function(x, y){
 
   }
 
-  return(y - predict(fit$model, newdata = list(x = x)))
+  outlier <- y - predict(fit$model, newdata = list(x = x))
+
+  exponential_coef <- setNames(as.vector(coef(fit$model)),
+                               names(coef(fit$model)))
+
+  df <- list(outlier = outlier , exponential_coef = exponential_coef)
+
+  return(df)
 
   # return(list(x = xx, y = yy, model = fit$model))
 }
@@ -93,22 +108,23 @@ build_model <- function(ngaussian = 1) {
 
 find_segment <- function(df, merge = TRUE, min_distance) {
 
-  spl <- smooth.spline(df$y ~ df$x)
+  spl <- smooth.spline(df$y_gaussian ~ df$x)
 
   pred1 <- predict(spl, x = df$x, deriv = 1)
   deriv1 <- pred1$y
 
-  rising <- c(ifelse(diff(deriv1) > 0, TRUE, FALSE), NA)
+  df$rising <- c(ifelse(diff(deriv1) > 0, TRUE, FALSE), NA)
 
-  myrle <- rle(rising)
+  myrle <- rle(df$rising)
 
-  df$rising <- rep(myrle$values, times = myrle$lengths)
+
   df$segment <- rep(1:length(myrle$lengths), times = myrle$lengths)
   df$deriv1 <- deriv1
 
   if(merge){
     df <- merge_segment(df, min_distance = min_distance)
   }
+
 
   res <- df %>%
     filter(rising == FALSE) %>%
@@ -117,11 +133,12 @@ find_segment <- function(df, merge = TRUE, min_distance) {
     mutate(integral = purrr::map(data, ~pracma::trapz(.$x, .$y))) %>%
     mutate(start_pos = purrr::map(data, ~min(.$x))) %>%
     mutate(end_pos = purrr::map(data, ~max(.$x))) %>%
-    mutate(has_peak = purrr::map(data, ~has_peak(.)))
-
-  res <- unnest(res, start_pos, end_pos, integral) %>%
+    mutate(has_peak = purrr::map(data, ~has_peak(.))) %>%
+    mutate(y_max = purrr::map(data, ~max(.$y_gaussian))) %>%
+    unnest(start_pos, end_pos, integral) %>%
     arrange(desc(integral)) %>%
-    mutate(segment = 1:nrow(.)) # make sur this way of sorting data works
+    mutate(segment = 1:nrow(.)) %>% # make sur this way of sorting data works
+    filter(integral != 0) # drop segments with juste 1 point (integral = 0)
 
   return(res)
 }
@@ -139,38 +156,22 @@ merge_segment <- function(segment, min_distance) {
   # Nothing to merge
   if(length(d) == 0) {return(segment)}
 
-  index <- purrr::map2(d[1:length(d) - 1], d[2:length(d)], function(x, y) x + y) %>%
-    unlist()
+  index <- res[res$rising == TRUE, ]$segment[d]
+  res$rising[index] <- FALSE
 
-  res2 <- res
+  myrle <- rle(res$rising)
 
-  res2$rising[index] <- FALSE
+  res$segment <- rep(1:length(myrle$lengths), times = myrle$lengths)
 
-  myrle <- rle(res2$rising)
-
-  res2$segment <- rep(1:length(myrle$lengths), times = myrle$lengths)
-
-  res3 <- unnest(res2) %>%
+  res2 <- unnest(res) %>%
     select(-end_pos)
 
-  return(res3)
+  return(res2)
 }
 
-find_initial <- function(spectra, segment) {
+find_initial_gaussian <- function(spectra, segment) {
 
   ngaussian <- nrow(segment)
-
-  # *************************************************************************
-  # Standrad exponential parameters
-  # *************************************************************************
-
-  sf <- splinefun(spectra$x, spectra$y)
-
-  a0 <- sf(350)           # estimate a0 at 350 nm
-  K <- mean(sf(600:700))  # mean value between 600-700 nm
-  S <- 0.02               # standard value of S
-
-  starting_exp <- c("a0" = a0, "K" = K, "S" = S)
 
   # *************************************************************************
   # Build a named vector with starting parameters.
@@ -179,30 +180,47 @@ find_initial <- function(spectra, segment) {
   # values.
   # *************************************************************************
 
-  segment <- segment %>%
-    mutate(p1 = purrr::map(data, ~.$x[which.min(abs(.$deriv1))])) %>%
-    mutate(p0 = purrr::map(data, ~.$y_gaussian[which.min(abs(.$deriv1))])) %>%
-    mutate(p2 = purrr::map(data, ~max(.$x) - min(.$x))) %>%
-    unnest(p1, p0, p2) %>%
-    filter(segment %in% 1:ngaussian)
+  params <- lapply(segment$data, p)
 
-  p0 <- segment$p0
-  p1 <- segment$p1
-  p2 <- segment$p2 / 2 # Find a better way
+  starting_gaussian <- as.vector(unlist(params))
 
-  starting_gaussian <- as.vector(rbind(p0, p1, p2))
   gaussian_name <- paste0(rep(c("p0", "p1", "p2"), time = ngaussian),
                           rep(letters[1:ngaussian], each = 3))
 
   starting_gaussian <- setNames(starting_gaussian, gaussian_name)
 
-  # *************************************************************************
-  # Bind everything together
-  # *************************************************************************
+  return(starting_gaussian)
+}
 
-  starting_value <- c(starting_exp, starting_gaussian)
+p <- function(seg) {
 
-  return(starting_value)
+  # Is the segment has a peak, then use it to estimate starting parameters
+  if (has_peak(seg)) {
+
+    params <- list(
+      p0 = max(seg$y_gaussian),
+      p1 = seg$x[which.max(seg$y_gaussian)],
+      p2 = (max(seg$x) - min(seg$x)) / 2
+      )
+
+    return(params)
+
+  }
+
+  # If the segment has no peak, then use the point in the middle of the
+  # segment to estimate parameters
+  mid_point <-  min(seg$x) + (max(seg$x) - min(seg$x)) / 2
+
+  sf <- splinefun(seg$x, seg$y_gaussian)
+
+  params <- list(
+    p0 = sf(mid_point),
+    p1 = mid_point,
+    p2 = (max(seg$x) - min(seg$x)) / 2
+    )
+
+  return(params)
+
 }
 
 #' @importFrom gridExtra grid.arrange
@@ -243,11 +261,18 @@ plot_segment <- function(spectra, segment) {
 #'
 #' @examples
 #' \dontrun{fitCDOMcomponents(x = wl, y = spc, min_distance = 50)}
-fitCDOMcomponents <- function(x, y, filter = TRUE, min_distance) {
+fitCDOMcomponents <- function(x,
+                              y,
+                              filter = TRUE,
+                              min_distance = 50,
+                              min_height = 1) {
 
-  spectra <- dplyr::data_frame(x = x, y = y) %>%
-    dplyr::mutate(y = signal::sgolayfilt(y, p = 3, n = 21)) %>%
-    dplyr::mutate(y_gaussian = extract_outlier(x, y))
+  spectra <- dplyr::data_frame(x = x, y = y)
+  spectra$y <- signal::sgolayfilt(y, p = 3, n = 21)
+
+  out <- extract_outlier(x, y)
+
+  spectra$y_gaussian <- out$outlier
 
   # segment <- find_segment(spectra, merge = FALSE, min_distance = min_distance)
   # plot_segment(spectra, segment)
@@ -260,12 +285,19 @@ fitCDOMcomponents <- function(x, y, filter = TRUE, min_distance) {
   # parameters for each of them.
   # *************************************************************************
 
-  segment <- guess_ngaussian(segment)
+  segment <- guess_ngaussian(segment, min_height = min_height)
   ngaussian <- nrow(segment)
   message(sprintf("Estimated number of components: %d\n", ngaussian))
 
-  starting_values <- find_initial(spectra, segment)
-  lower_values <- set_lower(starting_values)
+  starting_values <- find_initial_gaussian(spectra, segment)
+  starting_values <- c(out$exponential_coef, starting_values)
+
+  bound_values <- set_bounds(starting_values)
+
+  starting_values <- data_frame(param = names(starting_values),
+                                start = starting_values,
+                                lower = bound_values$lower_values,
+                                upper = bound_values$upper_values)
 
   # *************************************************************************
   # Build model equation.
@@ -305,14 +337,14 @@ fitCDOMcomponents <- function(x, y, filter = TRUE, min_distance) {
 
   fit <- tryCatch(
     minpack.lm::nlsLM(formula = myfunc,
-          start = starting_values,
-          lower = lower_values,
-          #upper = starting_values * 1.5,
+          start = starting_values$start,
+          lower = starting_values$lower,
+          #upper = starting_values$upper,
           data = data.frame(y = spectra$y, x = spectra$x),
           control = list(maxiter = maxit, maxfev = 1000)),
     error = function(e) NULL,  warning = function(e) NULL)
 
-  data_frame(params = names(starting_values), coef(fit), starting_values, lower_values)
+  starting_values$estimated <- coef(fit)
 
   # fo <- formula(sub(".*~", "~", deparse(myfunc)))
   # func <- gsubfn::fn$identity(fo)
@@ -323,12 +355,8 @@ fitCDOMcomponents <- function(x, y, filter = TRUE, min_distance) {
   lines(spectra$x, predict(fit, newdata = list(x = spectra$x)), col = "red")
   #lines(spectra$x, y2., col = "green")
 
-  res <- data_frame(
-    parameter = names(starting_values),
-    guess = starting_values,
-    nls = coef(fit))
 
-  return(res)
+  return(starting_values)
 
 }
 
@@ -342,43 +370,75 @@ has_peak <- function(x) {
 }
 
 # *************************************************************************
-# All integral greater than the average should be modeled?
+# Keep only peaks with a minimum height.
 # *************************************************************************
 
-guess_ngaussian <- function(segment) {
+guess_ngaussian <- function(segment, min_height = 1) {
 
-  segment <- filter(segment, integral >= mean(integral))
+  segment <- filter(segment, y_max >= min_height)
   return(segment)
-  # ngaussian <- which(segment$integral > mean(segment$integral))
+
 }
 
 # *************************************************************************
 # Set lower bounds to starting guesses.
 # *************************************************************************
-set_lower <- function(starting_values, segment) {
+set_bounds <- function(starting_values) {
+
+  # *************************************************************************
+  # Lower values
+  # *************************************************************************
 
   lower_values <- starting_values
 
   # Minimum values for the exponential parameters
   index <- grepl("S", names(starting_values))
-  lower_values[index] <- 0.001
+  lower_values[index] <- starting_values[index] * 0.5
 
   index <- grepl("K", names(starting_values))
-  lower_values[index] <- -starting_values[index]
+  lower_values[index] <- starting_values[index] / 5
 
   index <- grepl("a0", names(starting_values))
-  lower_values[index] <- starting_values[index] * 0.05
+  lower_values[index] <- starting_values[index] * 0.5
 
   # Minimum values for Gaussian parameters
   index <- grepl("p0", names(starting_values))
-  lower_values[index] <- starting_values[index] * 0.95
+  lower_values[index] <- starting_values[index] * 0.5
 
   index <- grepl("p1", names(starting_values))
-  lower_values[index] <- starting_values[index] * 0.95
+  lower_values[index] <- starting_values[index] * 0.5
 
   index <- grepl("p2", names(starting_values))
   lower_values[index] <- starting_values[index] * 0.15
 
-  return(lower_values)
+  # *************************************************************************
+  # Upper values
+  # *************************************************************************
+
+  upper_values <- starting_values
+
+  # Maximum values for the exponential parameters
+  index <- grepl("S", names(starting_values))
+  upper_values[index] <- starting_values[index] * 1.5
+
+  index <- grepl("K", names(starting_values))
+  upper_values[index] <- starting_values[index] * 5
+
+  index <- grepl("a0", names(starting_values))
+  upper_values[index] <- starting_values[index] * 1.5
+
+  # Minimum values for Gaussian parameters
+  index <- grepl("p0", names(starting_values))
+  upper_values[index] <- starting_values[index] * 1.5
+
+  index <- grepl("p1", names(starting_values))
+  upper_values[index] <- starting_values[index] * 1.5
+
+  index <- grepl("p2", names(starting_values))
+  upper_values[index] <- starting_values[index] * 1.15
+
+  df <- data_frame(lower_values, upper_values)
+
+  return(df)
 
 }
