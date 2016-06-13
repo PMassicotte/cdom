@@ -14,7 +14,7 @@
 #'
 #' @references \url{http://www.aslo.org/lo/toc/vol_53/issue_3/0955.html}
 #'
-#' @inheritParams cdom_fit_exponential
+#' @inheritParams cdom_exponential
 #'
 #' @return The value of the slope ratio.
 #' @export

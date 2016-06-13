@@ -26,8 +26,8 @@ All functions from the package start with the `cdom_` prefix.
 ``` r
 library(cdom)
 ls("package:cdom")
-## [1] "build_model"          "cdom_fit_exponential" "cdom_gaussian"       
-## [4] "cdom_slope_ratio"     "cdom_spectral_curve"  "spectra"
+## [1] "build_model"         "cdom_exponential"    "cdom_gaussian"      
+## [4] "cdom_slope_ratio"    "cdom_spectral_curve" "spectra"
 ```
 
 Examples
@@ -92,31 +92,26 @@ plot(wl, spc, type = "l")
 
 # Decompose the generated spectra
 
-myfit <- cdom_gaussian(x = wl, y = spc, min_distance = 50)
+myfit <- cdom_gaussian(x = wl, y = spc)
 ## Estimated number of components: 3
 
 coef(myfit)
 ##            S            K           a0          p0a          p1a 
-## 2.067688e-02 1.818111e-10 9.018645e+00 6.577036e+01 3.999479e+02 
+##   0.01622381   0.39967996  17.37329940  52.17380047 349.47322342 
 ##          p2a          p0b          p1b          p2b          p0c 
-## 1.626482e+01 5.896955e+01 3.495913e+02 2.312926e+01 3.838276e+01 
+##  17.75139043  66.62662933 397.79971727  16.78382014  23.15377365 
 ##          p1c          p2c 
-## 2.499487e+02 1.325231e+01
+## 249.47442064   8.32280227
 
 plot(myfit)
 ```
 
 ![](inst/images/README-unnamed-chunk-3-2.png)
 
-    ## TableGrob (2 x 1) "arrange": 2 grobs
-    ##   z     cells    name           grob
-    ## 1 1 (1-1,1-1) arrange gtable[layout]
-    ## 2 2 (2-2,1-1) arrange gtable[layout]
-
 The spectral slope (S)
 ----------------------
 
-The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov (1968), Lundgren (1976), Bricaud, Morel, and Prieur (1981).
+The `cdom_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by Jerlov (1968), Lundgren (1976), Bricaud, Morel, and Prieur (1981).
 
 ``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -127,17 +122,18 @@ library(ggplot2)
 library(cdom)
 data("spectra")
 
-fit <- cdom_fit_exponential(wl = spectra$wavelength,
+fit <- cdom_exponential(wl = spectra$wavelength,
                        absorbance = spectra$spc3,
                        wl0 = 350,
                        startwl = 190,
                        endwl = 900)
 
-ggplot(spectra, aes(x = wavelength, y = spc3)) +
-  geom_point() +
-  geom_line(aes(y = fit$data$.fitted), col = "red") +
-  xlab("Wavelength (nm)") +
-  ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
+coef(fit)
+##          S          K         a0 
+## 0.02220677 1.85125099 6.02460455
+
+p <- plot(fit)
+p
 ```
 
 ![](inst/images/README-exponential-1.png)
@@ -177,6 +173,25 @@ ggplot(res, aes(x = wl, y = s)) +
 ```
 
 ![](inst/images/README-spectral_curve-1.png)
+
+Using the pipe operator
+-----------------------
+
+``` r
+library(dplyr)
+library(tidyr)
+
+data(spectra)
+
+spectra <- spectra %>% 
+  gather(sample, absorption, starts_with("spc")) %>% 
+  group_by(sample) %>% 
+  nest() %>% 
+  mutate(model = purrr::map(data, ~cdom_exponential(.$wavelength, .$absorption, wl0 = 350, startwl = 190, endwl = 900)))
+
+
+#spectra %>% unnest(model %>% purrr::map(~.$data$.fitted))
+```
 
 Data
 ====

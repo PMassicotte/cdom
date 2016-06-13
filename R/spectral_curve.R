@@ -12,7 +12,7 @@
 #'@description Calculate the spectral curve of CDOM spectra has proposed by
 #'  Loiselle et al. 2009.
 #'
-#'@inheritParams cdom_fit_exponential
+#'@inheritParams cdom_exponential
 #'
 #'@param interval The interval used to claculate each slope (default = 21 nm).
 #'

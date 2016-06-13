@@ -92,7 +92,7 @@ plot(wl, spc, type = "l")
 
 # Decompose the generated spectra
 
-myfit <- cdom_gaussian(x = wl, y = spc, min_distance = 50)
+myfit <- cdom_gaussian(x = wl, y = spc)
 
 coef(myfit)
 
@@ -101,7 +101,7 @@ plot(myfit)
 
 ## The spectral slope (S)
 
-The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
+The `cdom_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
 
 ```tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -112,17 +112,16 @@ library(ggplot2)
 library(cdom)
 data("spectra")
 
-fit <- cdom_fit_exponential(wl = spectra$wavelength,
+fit <- cdom_exponential(wl = spectra$wavelength,
                        absorbance = spectra$spc3,
                        wl0 = 350,
                        startwl = 190,
                        endwl = 900)
 
-ggplot(spectra, aes(x = wavelength, y = spc3)) +
-  geom_point() +
-  geom_line(aes(y = fit$data$.fitted), col = "red") +
-  xlab("Wavelength (nm)") +
-  ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
+coef(fit)
+
+p <- plot(fit)
+p
 
 ```
 
@@ -157,6 +156,26 @@ ggplot(res, aes(x = wl, y = s)) +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 
 ```
+
+
+## Using the pipe operator
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+data(spectra)
+
+spectra <- spectra %>% 
+  gather(sample, absorption, starts_with("spc")) %>% 
+  group_by(sample) %>% 
+  nest() %>% 
+  mutate(model = purrr::map(data, ~cdom_exponential(.$wavelength, .$absorption, wl0 = 350, startwl = 190, endwl = 900)))
+
+
+#spectra %>% unnest(model %>% purrr::map(~.$data$.fitted))
+```
+
 
 # Data
 

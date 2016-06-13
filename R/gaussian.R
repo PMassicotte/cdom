@@ -3,7 +3,7 @@ extract_outlier <- function(x, y){
   xx <- x
   yy <- y
 
-  fit <- cdom_fit_exponential(wl = xx,
+  fit <- cdom_exponential(wl = xx,
                               absorbance = yy,
                               wl0 = 350,
                               startwl = min(xx),
@@ -19,7 +19,7 @@ extract_outlier <- function(x, y){
     #plot(xx, yy)
     #lines(x, predict(fit, newdata = list(xx = x)), col = "red")
 
-    toremove <- which(fit$data$.resid > 1 * mean(abs(fit$data$.resid)))
+    toremove <- which(residuals(fit$model) > 1 * mean(abs(residuals(fit$model))))
 
     ## Do not remove points at the very low wavelength
     toremove <- toremove[which(toremove - seq(1:length(toremove)) > 0)]
@@ -32,7 +32,7 @@ extract_outlier <- function(x, y){
       xx <- xx[-toremove]
       yy <- yy[-toremove]
 
-      fit <- cdom_fit_exponential(wl = xx,
+      fit <- cdom_exponential(wl = xx,
                                   absorbance = yy,
                                   wl0 = 350,
                                   startwl = min(xx),
