@@ -71,7 +71,6 @@ extract_outlier <- function(x, y){
 
   return(df)
 
-  # return(list(x = xx, y = yy, model = fit$model))
 }
 
 
@@ -85,7 +84,16 @@ func1 <- function(par, x, y, functooptimise){
 
 }
 
+
+#' Build Gaussian Model
+#'
+#' @param ngaussian Numerical. Number of Gaussian component to consider.
+#'
+#' @return A \code{formula} object.
 #' @export
+#'
+#' @examples
+#' myfunction <- build_model(2)
 build_model <- function(ngaussian = 1) {
 
   exponential_part <- "y ~ a0 * exp(-S * (x - 350)) + K +"
@@ -105,6 +113,19 @@ build_model <- function(ngaussian = 1) {
 
   return(myfunc)
 }
+
+gaussian <- function(df, x) {
+
+  index_p0 <- which(df$param == "p0")
+  index_p1 <- which(df$param == "p1")
+  index_p2 <- which(df$param == "p2")
+
+  res <- df$estimated[index_p0] * exp(-((x - df$estimated[index_p1])^2 / (2 * df$estimated[index_p2]^2)))
+
+  return(res)
+}
+
+
 
 find_segment <- function(df, merge = TRUE, min_distance) {
 
@@ -248,24 +269,32 @@ plot_segment <- function(spectra, segment) {
 #' @param y Numerical vector of absorption/absorbance values.
 #' @param filter Logical. Should the spectra filtered? Default is TRUE.
 #' @param min_distance Minimum distance in nm allowed between possible Gaussian
-#'   components.
+#'   components. Default is 50 nm.
+#' @param merge Logical. Determines if initially estimated Gaussian components
+#'   should be merged.
+#' @param min_height Numerical. Determines the minimum height (per meter) to
+#'   model Gaussian components. This is usefull to set a threshold to avoid
+#'   modeling noise at higher wavelenghts. Default is 1.
 #'
 #' @return A data frame with estimated parameters.
 #' @export
 #'
 #' @importFrom  signal sgolayfilt
+#' @importFrom stats as.formula formula setNames smooth.spline
+#' @importFrom utils data
 #' @import dplyr
 #' @import minpack.lm
 #' @importFrom  purrr map
 #' @import proto
 #'
 #' @examples
-#' \dontrun{fitCDOMcomponents(x = wl, y = spc, min_distance = 50)}
-fitCDOMcomponents <- function(x,
-                              y,
-                              filter = TRUE,
-                              min_distance = 50,
-                              min_height = 1) {
+#' \dontrun{cdom_gaussian(x = wl, y = spc, min_distance = 50)}
+cdom_gaussian <- function(x,
+                          y,
+                          filter = TRUE,
+                          merge = TRUE,
+                          min_distance = 50,
+                          min_height = 1) {
 
   spectra <- dplyr::data_frame(x = x, y = y)
   spectra$y <- signal::sgolayfilt(y, p = 3, n = 21)
@@ -277,8 +306,8 @@ fitCDOMcomponents <- function(x,
   # segment <- find_segment(spectra, merge = FALSE, min_distance = min_distance)
   # plot_segment(spectra, segment)
 
-  segment <- find_segment(spectra, merge = TRUE, min_distance = min_distance)
-  plot_segment(spectra, segment)
+  segment <- find_segment(spectra, merge = merge, min_distance = min_distance)
+  # plot_segment(spectra, segment)
 
   # *************************************************************************
   # Find the "right" number of gaussian component and estimate starting
@@ -314,49 +343,66 @@ fitCDOMcomponents <- function(x,
 
   maxit <- 1000
 
-  # bestguesses2 <- BB::spg(par = starting_values,
-  #            fn = func1,
-  #                        x = spectra$x,
-  #                        y = spectra$y,
-  #                        functooptimise = myfunc,
-  #                        control = list(maxit = maxit),
-  #                        lower = starting_values - starting_values,
-  #                         upper = starting_values * 2,
-  #                        method = 1,
-  #                        quiet = TRUE)
-  #
-  # bestguesses <- optim(par = starting_values,
+  # bestguesses <- optim(par = starting_values$start,
   #                      fn = func1 ,
   #                      x = spectra$x,
   #                      y = spectra$y,
   #                      functooptimise = myfunc,
   #                      control = list(maxit = maxit),
-  #                      lower = starting_values - starting_values,
-  #                      upper = starting_values * 2,
+  #                      lower = starting_values$lower,
+  #                      #upper = starting_values * 2,
   #                      method = c("L-BFGS-B"))
+  #
+  # starting_values$estimated <- bestguesses$par
 
-  fit <- tryCatch(
-    minpack.lm::nlsLM(formula = myfunc,
-          start = starting_values$start,
-          lower = starting_values$lower,
-          #upper = starting_values$upper,
-          data = data.frame(y = spectra$y, x = spectra$x),
-          control = list(maxiter = maxit, maxfev = 1000)),
-    error = function(e) NULL,  warning = function(e) NULL)
+  safe_nls <- purrr::safely(minpack.lm::nlsLM)
 
-  starting_values$estimated <- coef(fit)
+  fit <- safe_nls(formula = myfunc,
+                  start = starting_values$start,
+                  lower = starting_values$lower,
+                  # upper = starting_values$upper,
+                  data = data.frame(y = spectra$y, x = spectra$x),
+                  control = list(maxiter = maxit, maxfev = 1000))
 
-  # fo <- formula(sub(".*~", "~", deparse(myfunc)))
-  # func <- gsubfn::fn$identity(fo)
-  # y. <- do.call(func, c(list(x = spectra$x), bestguesses$par))
-  # y2. <- do.call(func, c(list(x = spectra$x), bestguesses2$par))
+  # A valide nls model as been returned
+  if (is.null(fit$error)) {
 
-  plot(spectra$x, spectra$y)
-  lines(spectra$x, predict(fit, newdata = list(x = spectra$x)), col = "red")
-  #lines(spectra$x, y2., col = "green")
+    starting_values$estimated <- coef(fit$result)
 
+    res <- list(coef = starting_values, x = spectra$x, y = spectra$y)
+    class(res) <- "cdom_gaussian"
 
-  return(starting_values)
+    return(res)
+
+  } else {
+    return(NULL)
+  }
+
+  # fit <- tryCatch(
+  #   minpack.lm::nlsLM(formula = myfunc,
+  #         start = starting_values$start,
+  #         lower = starting_values$lower,
+  #         # upper = starting_values$upper,
+  #         data = data.frame(y = spectra$y, x = spectra$x),
+  #         control = list(maxiter = maxit, maxfev = 1000)),
+  #   error = function(e) NULL,  warning = function(e) NULL)
+
+  # starting_values$estimated <- coef(fit)
+
+  # bestguesses <- optimx::optimx(par = starting_values$start,
+  #                               fn = func1 ,
+  #                               x = spectra$x,
+  #                               y = spectra$y,
+  #                               functooptimise = myfunc,
+  #                               method = "nmkb")
+  #
+  # starting_values$estimated <- unlist(bestguesses[1:nrow(starting_values)])
+
+  # res <- list(params = starting_values)
+  #
+  # class(res) <- "cdom_gaussian"
+  #
+  # return(res)
 
 }
 
@@ -383,6 +429,7 @@ guess_ngaussian <- function(segment, min_height = 1) {
 # *************************************************************************
 # Set lower bounds to starting guesses.
 # *************************************************************************
+
 set_bounds <- function(starting_values) {
 
   # *************************************************************************
@@ -441,4 +488,132 @@ set_bounds <- function(starting_values) {
 
   return(df)
 
+}
+
+#' Gaussian Model Predictions
+#'
+#' @param object a \code{cdom_gaussian} model object for which prediction is
+#'   desired.
+#' @param ...	other arguments.
+#'
+#' @return A data frame containing
+#'  \describe{
+#'   \item{exponential_part}{The fitted exponential part of the model}
+#'   \item{component1 ... componentn}{The individual Gaussian components}
+#'   \item{spectra}{The fitted spectra}
+#' }
+#' @export
+#'
+#' @examples
+#' data(spectra)
+#' myfit <- cdom_gaussian(spectra$wavelength,
+#'                        spectra$spc1,
+#'                        min_distance = 25,
+#'                        min_height = 0.5)
+#'
+#' predict(myfit)
+predict.cdom_gaussian <- function(object, ...) {
+
+  res <- extract_components(object)
+
+  return(res)
+
+}
+
+#' Extract Model Coefficients
+#'
+#' @param object An object returned by \code{cdom_gaussian()}.
+#' @param ...	other arguments.
+#'
+#' @return Coefficients extracted from the model object \code{object}.
+#' @export
+#'
+#' @examples
+#' data(spectra)
+#' myfit <- cdom_gaussian(spectra$wavelength,
+#'                        spectra$spc1,
+#'                        min_distance = 25,
+#'                        min_height = 0.5)
+#'
+#' coef(myfit)
+coef.cdom_gaussian <- function(object, ...) {
+
+  res <- object$coef$estimated
+  res <- setNames(res, object$coef$param)
+
+  return(res)
+}
+
+#' Plot CDOM Gaussian components
+#'
+#' @param x An object returned by the \code{cdom_gaussian()} function.
+#' @param ...	other arguments.
+#'
+#' @return A ggplot2 plot.
+#' @export
+#' @importFrom gridExtra grid.arrange
+#'
+#' @examples
+#' data(spectra)
+#' myfit <- cdom_gaussian(spectra$wavelength,
+#'                        spectra$spc1,
+#'                        min_distance = 25,
+#'                        min_height = 0.5)
+#' plot(myfit)
+
+plot.cdom_gaussian <- function(x, ...) {
+
+  df <- data.frame(x = x$x, y = x$y)
+
+  components <- predict(x)
+  components$x <- x$x
+
+  # Plot showing raw data and the fitted curve
+  p1 <- ggplot(df, aes(x = x, y = y)) +
+    geom_point() +
+    geom_line(data = components, aes(x = x, y = spectra), col = "red")
+
+  # Plot showing the Gaussian components
+  df <- gather(components, component, value, starts_with("component"))
+
+  p2 <- ggplot(df, aes(x = x, y = value)) +
+    geom_line(aes(color = component))
+
+  p <- gridExtra::grid.arrange(p1, p2)
+
+  print(p)
+
+}
+
+extract_components <- function(x) {
+
+  params <- coef(x)
+
+  # Extract the exponential part
+  a0 <- params[names(params) == "a0"]
+  S <- params[names(params) == "S"]
+  K <- params[names(params) == "K"]
+
+  exponential_part <- a0 * exp(-S * (x$x - 350)) + K
+  exponential_part <- as.data.frame(exponential_part)
+
+  # Extract the Gaussiance components
+  ngaussian <- (length(params) - 3) / 3
+
+  df <- x$coef[grepl("p\\d", x$coef$param), ]
+  df <- tidyr::separate(df, param, c("param", "component"), 2)
+  df <- group_by(df, component)
+  df <- nest(df)
+
+  components <- purrr::map(df$data, ~ gaussian(., x = x$x))
+
+  components <- do.call(cbind, components)
+  components <- as.data.frame(components)
+
+  res <- bind_cols(exponential_part, components)
+  res$spectra <- rowSums(res)
+
+  names(res) <- c("exponential_part", paste0("component", 1:ngaussian), "spectra")
+
+  return(res)
 }

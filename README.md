@@ -26,8 +26,8 @@ All functions from the package start with the `cdom_` prefix.
 ``` r
 library(cdom)
 ls("package:cdom")
-## [1] "build_model"          "cdom_fit_exponential" "cdom_slope_ratio"    
-## [4] "cdom_spectral_curve"  "fitCDOMcomponents"    "spectra"
+## [1] "build_model"          "cdom_fit_exponential" "cdom_gaussian"       
+## [4] "cdom_slope_ratio"     "cdom_spectral_curve"  "spectra"
 ```
 
 Examples
@@ -50,6 +50,7 @@ library(dplyr)
 ##     intersect, setdiff, setequal, union
 library(gsubfn)
 ## Loading required package: proto
+## Could not load tcltk.  Will use slower R code instead.
 
 set.seed(1234)
 
@@ -85,40 +86,32 @@ spc <- do.call(func, c(list(x = wl), params))
 plot(wl, spc, type = "l")
 ```
 
-![](inst/images/README-unnamed-chunk-3-1.png)<!-- -->
+![](inst/images/README-unnamed-chunk-3-1.png)
 
 ``` r
 
 # Decompose the generated spectra
 
-myfit <- fitCDOMcomponents(x = wl, y = spc, min_distance = 50) %>%
-  mutate(true_value = params) %>%
-  select(parameter, true_value, guess, nls)
+myfit <- cdom_gaussian(x = wl, y = spc, min_distance = 50)
 ## Estimated number of components: 3
+
+coef(myfit)
+##            S            K           a0          p0a          p1a 
+## 2.067688e-02 1.818111e-10 9.018645e+00 6.577036e+01 3.999479e+02 
+##          p2a          p0b          p1b          p2b          p0c 
+## 1.626482e+01 5.896955e+01 3.495913e+02 2.312926e+01 3.838276e+01 
+##          p1c          p2c 
+## 2.499487e+02 1.325231e+01
+
+plot(myfit)
 ```
 
-![](inst/images/README-unnamed-chunk-3-2.png)<!-- -->![](inst/images/README-unnamed-chunk-3-3.png)<!-- -->
+![](inst/images/README-unnamed-chunk-3-2.png)
 
-``` r
-
-myfit
-## Source: local data frame [12 x 4]
-## 
-##    parameter true_value        guess          nls
-##        (chr)      (dbl)        (dbl)        (dbl)
-## 1         a0      10.00  68.68442198   9.04811590
-## 2          K       0.02   0.02921391   0.00000000
-## 3          S       0.00   0.02000000   0.02065551
-## 4        p0a      43.00  25.32752720  38.32015999
-## 5        p1a     250.00 236.13065327 249.95115962
-## 6        p2a      10.00   2.56281407  13.22924763
-## 7        p0b      60.00  60.10952679  58.94969680
-## 8        p1b     350.00 348.89447236 349.58230837
-## 9        p2b      22.00   3.07537688  23.10931359
-## 10       p0c      70.00  71.61019071  65.78835127
-## 11       p1c     400.00 397.58793970 399.94114070
-## 12       p2c      15.00   2.81909548  16.27522071
-```
+    ## TableGrob (2 x 1) "arrange": 2 grobs
+    ##   z     cells    name           grob
+    ## 1 1 (1-1,1-1) arrange gtable[layout]
+    ## 2 2 (2-2,1-1) arrange gtable[layout]
 
 The spectral slope (S)
 ----------------------
@@ -147,7 +140,7 @@ ggplot(spectra, aes(x = wavelength, y = spc3)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](inst/images/README-exponential-1.png)<!-- -->
+![](inst/images/README-exponential-1.png)
 
 The slope ratio (SR)
 --------------------
@@ -183,7 +176,7 @@ ggplot(res, aes(x = wl, y = s)) +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 ```
 
-![](inst/images/README-spectral_curve-1.png)<!-- -->
+![](inst/images/README-spectral_curve-1.png)
 
 Data
 ====
@@ -203,7 +196,7 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](inst/images/README-data-1.png)<!-- -->
+![](inst/images/README-data-1.png)
 
 How to cite the package
 =======================
