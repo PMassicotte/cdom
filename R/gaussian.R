@@ -367,10 +367,10 @@ cdom_gaussian <- function(x,
   # A valide nls model as been returned
   if (is.null(fit$error)) {
 
-    starting_values$estimated <- coef(fit$result)
+    r2 <- 1 - sum((spectra$y - predict(fit$result))^2) / (length(spectra$y) * var(spectra$y))
 
-    res <- list(coef = starting_values, x = spectra$x, y = spectra$y)
-    class(res) <- "cdom_gaussian"
+    res <- list(model = fit$result, x = spectra$x, y = spectra$y, r2 = r2)
+    class(res) <- "gaussian_fit"
 
     return(res)
 
@@ -512,7 +512,7 @@ set_bounds <- function(starting_values) {
 #'                        min_height = 0.5)
 #'
 #' predict(myfit)
-predict.cdom_gaussian <- function(object, ...) {
+predict.gaussian_fit <- function(object, ...) {
 
   res <- extract_components(object)
 
@@ -536,12 +536,10 @@ predict.cdom_gaussian <- function(object, ...) {
 #'                        min_height = 0.5)
 #'
 #' coef(myfit)
-coef.cdom_gaussian <- function(object, ...) {
+coef.gaussian_fit <- function(object, ...) {
 
-  res <- object$coef$estimated
-  res <- setNames(res, object$coef$param)
+  coef(object$model)
 
-  return(res)
 }
 
 #' Plot CDOM Gaussian components
@@ -561,7 +559,7 @@ coef.cdom_gaussian <- function(object, ...) {
 #'                        min_height = 0.5)
 #' plot(myfit)
 
-plot.cdom_gaussian <- function(x, ...) {
+plot.gaussian_fit <- function(x, ...) {
 
   df <- data.frame(x = x$x, y = x$y)
 
@@ -581,7 +579,7 @@ plot.cdom_gaussian <- function(x, ...) {
 
   p <- gridExtra::grid.arrange(p1, p2)
 
-  print(p)
+  invisible(p)
 
 }
 
@@ -600,7 +598,8 @@ extract_components <- function(x) {
   # Extract the Gaussiance components
   ngaussian <- (length(params) - 3) / 3
 
-  df <- x$coef[grepl("p\\d", x$coef$param), ]
+  df <- data.frame(param = names(coef(x)[grepl("p\\d", names(coef(x)))]),
+                   estimated = coef(x)[grepl("p\\d", names(coef(x)))])
   df <- tidyr::separate(df, param, c("param", "component"), 2)
   df <- group_by(df, component)
   df <- nest(df)
