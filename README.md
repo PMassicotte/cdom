@@ -26,7 +26,7 @@ All functions from the package start with the `cdom_` prefix.
 ``` r
 library(cdom)
 ls("package:cdom")
-## [1] "cdom_fit_exponential" "cdom_slope_ratio"     "cdom_spectral_curve" 
+## [1] "cdom_exponential"    "cdom_slope_ratio"    "cdom_spectral_curve"
 ## [4] "spectra"
 ```
 
@@ -47,7 +47,7 @@ library(ggplot2)
 library(cdom)
 data("spectra")
 
-fit <- cdom_fit_exponential(wl = spectra$wavelength,
+fit <- cdom_exponential(wl = spectra$wavelength,
                        absorbance = spectra$spc3,
                        wl0 = 350,
                        startwl = 190,
@@ -60,7 +60,7 @@ ggplot(spectra, aes(x = wavelength, y = spc3)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](inst/images/README-exponential-1.png)<!-- -->
+![](inst/images/README-exponential-1.png)
 
 The slope ratio (SR)
 --------------------
@@ -96,7 +96,34 @@ ggplot(res, aes(x = wl, y = s)) +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 ```
 
-![](inst/images/README-spectral_curve-1.png)<!-- -->
+![](inst/images/README-spectral_curve-1.png)
+
+Using the pipe operator
+-----------------------
+
+``` r
+library(dplyr)
+## 
+## Attaching package: 'dplyr'
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+library(tidyr)
+
+data(spectra)
+
+spectra <- spectra %>% 
+  gather(sample, absorption, starts_with("spc")) %>% 
+  group_by(sample) %>% 
+  nest() %>% 
+  mutate(model = purrr::map(data, ~cdom_exponential(.$wavelength, .$absorption, wl0 = 350, startwl = 190, endwl = 900)))
+
+
+#spectra %>% unnest(model %>% purrr::map(~.$data$.fitted))
+```
 
 Data
 ====
@@ -116,7 +143,7 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
 ```
 
-![](inst/images/README-data-1.png)<!-- -->
+![](inst/images/README-data-1.png)
 
 How to cite the package
 =======================

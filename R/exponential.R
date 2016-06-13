@@ -1,11 +1,3 @@
-#<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-# FILE:         fit_exponential.R
-#
-# AUTHOR:       Philippe Massicotte
-#
-# DESCRIPTION:  Fit an exponential curve to CDOM data.
-#<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
 #' Fit an exponential model to CDOM data.
 #'
 #' @details \deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
@@ -28,19 +20,20 @@
 #' @import minpack.lm
 #' @importFrom broom tidy augment
 #' @importFrom stats splinefun predict var coef lm na.omit
+#' @importFrom purrr safely
 #'
 #' @examples
 #' # Fit an exponential model using the reference wavelength 350 between 190 and 900 nm.
 #'
 #' data(spectra)
 #'
-#' fit <- cdom_fit_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
+#' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 #' str(fit)
 #'
 #' plot(spectra$wavelength, spectra$spc1)
 #' lines(spectra$wavelength, fit$data$.fitted, col = "red")
 
-cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
+cdom_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
 
   stopifnot(length(wl) == length(absorbance),
             is.numeric(absorbance),
@@ -49,10 +42,11 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
             is.vector(absorbance),
             is.numeric(wl0),
             is.numeric(startwl),
-            is.numeric(endwl))
+            is.numeric(endwl),
+            wl0 > min(wl) & wl0 < max(wl))
 
-  if(missing(startwl)){startwl = min(wl)}
-  if(missing(endwl)){endwl = max(wl)}
+  if (missing(startwl)) {startwl = min(wl)}
+  if (missing(endwl)) {endwl = max(wl)}
 
   #--------------------------------------------
   # Get a0 value.
@@ -66,6 +60,8 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
   x <- wl[which(wl >= startwl & wl <= endwl)]
   y <- absorbance[which(wl >= startwl & wl <= endwl)]
 
+  df <- data.frame(x = x, y = y)
+
   #--------------------------------------------
   # Fit the data.
   #--------------------------------------------
@@ -74,30 +70,26 @@ cdom_fit_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
                   maxiter = 1024,
                   maxfev = 600)
 
-  res <- try({
+  safe_nls <- purrr::safely(minpack.lm::nlsLM)
 
-    fit <- nlsLM(y ~ a0 * exp(-S * (x - wl0)) + K,
+  fit <- safe_nls(y ~ a0 * exp(-S * (x - wl0)) + K,
                  start = c(S = 0.02, K = 0.01, a0 = a0),
                  lower = c(S = 0, K = -Inf, a0 = 0),
                  upper = c(S = 1, K = Inf, a0 = max(y)),
-                 control = control)
+                 control = control,
+                 data = df)
 
-      r2 <- 1 - sum((y - predict(fit))^2) / (length(y) * var(y))
+  if (is.null(fit$error)) {
 
-      return(list(params = tidy(fit), r2 = r2, data = augment(fit)))
+    r2 <- 1 - sum((y - predict(fit$result))^2) / (length(y) * var(y))
+    return(list(params = tidy(fit$result),
+                r2 = r2,
+                data = augment(fit$result),
+                model = fit$result))
 
-  }, silent = TRUE)
+  } else {
+    return(NULL)
+  }
 
 
-  # Print the error
-  warning(res, call. = FALSE)
-
-  params <- data.frame(matrix(nrow = 3, ncol = 5))
-  names(params) <- c("term", "estimate", "std.error", "statistic", "p.value")
-
-  data <- data.frame(x = x, y = y, wl0 = wl0, .fitted = NA, .resid = NA)
-
-  return(list(params = params,
-              r2 = NA,
-              data = data))
 }

@@ -61,7 +61,7 @@ library(ggplot2)
 library(cdom)
 data("spectra")
 
-fit <- cdom_fit_exponential(wl = spectra$wavelength,
+fit <- cdom_exponential(wl = spectra$wavelength,
                        absorbance = spectra$spc3,
                        wl0 = 350,
                        startwl = 190,
@@ -106,6 +106,26 @@ ggplot(res, aes(x = wl, y = s)) +
   ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
 
 ```
+
+
+## Using the pipe operator
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+data(spectra)
+
+spectra <- spectra %>% 
+  gather(sample, absorption, starts_with("spc")) %>% 
+  group_by(sample) %>% 
+  nest() %>% 
+  mutate(model = purrr::map(data, ~cdom_exponential(.$wavelength, .$absorption, wl0 = 350, startwl = 190, endwl = 900)))
+
+
+#spectra %>% unnest(model %>% purrr::map(~.$data$.fitted))
+```
+
 
 # Data
 

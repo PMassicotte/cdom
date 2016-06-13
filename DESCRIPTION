@@ -15,7 +15,8 @@ Imports:
     minpack.lm,
     ggplot2,
     tidyr,
-    broom
+    broom,
+    purrr
 RoxygenNote: 5.0.1
 Suggests:
     eemR
