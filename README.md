@@ -53,11 +53,12 @@ fit <- cdom_exponential(wl = spectra$wavelength,
                        startwl = 190,
                        endwl = 900)
 
-ggplot(spectra, aes(x = wavelength, y = spc3)) +
-  geom_point() +
-  geom_line(aes(y = fit$data$.fitted), col = "red") +
-  xlab("Wavelength (nm)") +
-  ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
+coef(fit)
+##          S          K         a0 
+## 0.02220677 1.85125099 6.02460455
+
+p <- plot(fit)
+p
 ```
 
 ![](inst/images/README-exponential-1.png)

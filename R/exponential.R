@@ -28,7 +28,6 @@
 #' data(spectra)
 #'
 #' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
-#' str(fit)
 #'
 #' plot(spectra$wavelength, spectra$spc1)
 #' lines(spectra$wavelength, fit$data$.fitted, col = "red")
@@ -82,14 +81,103 @@ cdom_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
   if (is.null(fit$error)) {
 
     r2 <- 1 - sum((y - predict(fit$result))^2) / (length(y) * var(y))
-    return(list(params = tidy(fit$result),
-                r2 = r2,
-                data = augment(fit$result),
-                model = fit$result))
+
+    res <- list(model = fit$result, r2 = r2, x = x, y = y)
+    class(res) <- "exponential_fit"
+
+    return(res)
 
   } else {
     return(NULL)
   }
+}
 
+#' Predict method for CDOM exponential fit
+#'
+#' @param object An object returned by \code{cdom_exponential}.
+#' @param ... other arguments.
+#'
+#' @return A numerical vector with predicted values.
+#' @export
+#'
+#' @examples
+#' data(spectra)
+#'
+#' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
+#' predict(fit)
+predict.exponential_fit <- function(object, ...) {
+
+  res <- predict(object$model)
+
+  return(res)
+
+}
+
+#' Extract Model Coefficients from a CDOM exponential fit
+#'
+#' @param object An object returned by \code{cdom_exponential}.
+#' @param ... other arguments.
+#'
+#' @return A numerical vector with estimated coefficients.
+#' @export
+#'
+#' @examples
+#' data(spectra)
+#'
+#' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
+#' coef(fit)
+coef.exponential_fit <- function(object, ...) {
+
+  res <- coef(object$model)
+
+  return(res)
+
+}
+
+#' Plot a Fitted CDOM Exponential Curve
+#'
+#' @param x An object returned by \code{cdom_exponential}.
+#' @param ... other arguments.
+#'
+#' @return A ggplot2 object.
+#' @export
+#'
+#' @examples
+#' library(ggplot2)
+#'
+#' data(spectra)
+#'
+#' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
+#' p <- plot(fit)
+#' p
+#' p + ggtitle("My super fit")
+plot.exponential_fit <- function(x, ...) {
+
+  df <- data.frame(x = x$x, y = x$y, yy = predict(x))
+
+  p <- ggplot(df, aes(x = x)) +
+    geom_point(aes_string(y = "y")) +
+    geom_line(aes_string(y = "yy"), col = "red")
+
+  invisible(p)
+}
+
+#' Summary of a CDOM exponential fit
+#'
+#' @param object An object returned by \code{cdom_exponential}.
+#' @param ... other arguments.
+#'
+#' @return A numerical vector with estimated coefficients.
+#' @export
+#'
+#' @examples
+#' data(spectra)
+#'
+#' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
+#' summary(fit)
+summary.exponential_fit <- function(object, ...) {
+
+  print(summary(object$model))
+  cat("r2 = ", object$r2)
 
 }
