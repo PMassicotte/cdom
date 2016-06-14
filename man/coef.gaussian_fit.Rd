@@ -20,9 +20,9 @@ Extract Model Coefficients
 \examples{
 data(spectra)
 myfit <- cdom_gaussian(spectra$wavelength,
-                       spectra$spc1,
-                       min_distance = 25,
-                       min_height = 0.5)
+                       spectra$spc21,
+                       min_distance = 50,
+                       min_height = 10)
 
 coef(myfit)
 }

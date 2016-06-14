@@ -1,3 +1,4 @@
+#' @importFrom stats residuals
 extract_outlier <- function(x, y){
 
   xx <- x
@@ -147,30 +148,28 @@ find_segment <- function(df, merge = TRUE, min_distance) {
   }
 
 
-  res <- df %>%
-    filter(rising == FALSE) %>%
-    group_by(segment) %>%
-    nest() %>%
-    mutate(integral = purrr::map(data, ~pracma::trapz(.$x, .$y))) %>%
-    mutate(start_pos = purrr::map(data, ~min(.$x))) %>%
-    mutate(end_pos = purrr::map(data, ~max(.$x))) %>%
-    mutate(has_peak = purrr::map(data, ~has_peak(.))) %>%
-    mutate(y_max = purrr::map(data, ~max(.$y_gaussian))) %>%
-    unnest(start_pos, end_pos, integral) %>%
-    arrange(desc(integral)) %>%
-    mutate(segment = 1:nrow(.)) %>% # make sur this way of sorting data works
-    filter(integral != 0) # drop segments with juste 1 point (integral = 0)
+  res <- filter_(df, ~rising == FALSE)
+  res <- group_by_(res, "segment")
+  res <- nest_(res, "data")
+  res <- mutate_(res, integral = ~purrr::map(data, ~pracma::trapz(.$x, .$y)))
+  res <- mutate_(res, start_pos = ~purrr::map(data, ~min(.$x)))
+  res <- mutate_(res, end_pos = ~purrr::map(data, ~max(.$x)))
+  res <- mutate_(res, has_peak = ~purrr::map(data, ~has_peak(.)))
+  res <- mutate_(res, y_max = ~purrr::map(data, ~max(.$y_gaussian)))
+  res <- unnest_(res, c("start_pos", "end_pos", "integral"))
+  res <- arrange_(res, ~desc(integral))
+  res <- mutate_(res, segment = ~1:nrow(res)) # make sur this way of sorting data works
+  res <- filter_(res, ~integral != 0) # drop segments with juste 1 point (integral = 0)
 
   return(res)
 }
 
 merge_segment <- function(segment, min_distance) {
 
-  res <- segment %>%
-    group_by(rising, segment) %>%
-    nest() %>%
-    mutate(end_pos = purrr::map(data, ~max(.$x))) %>%
-    unnest(end_pos)
+  res <- group_by_(segment, c("rising", "segment"))
+  res <- nest_(res, "data")
+  res <- mutate_(res, end_pos = ~purrr::map(data, ~max(.$x)))
+  res <- unnest_(res, "end_pos")
 
   d <- which((diff(res$end_pos[res$rising == FALSE]) < min_distance) == TRUE)
 
@@ -184,8 +183,8 @@ merge_segment <- function(segment, min_distance) {
 
   res$segment <- rep(1:length(myrle$lengths), times = myrle$lengths)
 
-  res2 <- unnest(res) %>%
-    select(-end_pos)
+  res2 <- unnest_(res)
+  res2 <- select_(res2, "-end_pos")
 
   return(res2)
 }
@@ -234,11 +233,9 @@ p <- function(seg) {
 
   sf <- splinefun(seg$x, seg$y_gaussian)
 
-  params <- list(
-    p0 = sf(mid_point),
-    p1 = mid_point,
-    p2 = (max(seg$x) - min(seg$x)) / 2
-    )
+  params <- list(p0 = sf(mid_point),
+                 p1 = mid_point,
+                 p2 = (max(seg$x) - min(seg$x)) / 2)
 
   return(params)
 
@@ -250,12 +247,12 @@ plot_segment <- function(spectra, segment) {
   segment <- unnest(segment, data)
 
   p1 <- ggplot() +
-    geom_point(data = spectra, aes(x = x, y = y), col = "black") +
-    geom_point(data = segment, aes(x = x, y = y, col = factor(segment)))
+    geom_point(data = spectra, aes_string(x = "x", y = "y"), col = "black") +
+    geom_point(data = segment, aes_string(x = "x", y = "y", col = factor(segment)))
 
   p2 <- ggplot() +
-    geom_point(data = spectra, aes(x = x, y = y_gaussian), col = "black") +
-    geom_point(data = segment, aes(x = x, y = y_gaussian, col = factor(segment)))
+    geom_point(data = spectra, aes_string(x = "x", y = "y_gaussian"), col = "black") +
+    geom_point(data = segment, aes_string(x = "x", y = "y_gaussian", col = factor(segment)))
 
   p <- gridExtra::grid.arrange(p1, p2, ncol = 1)
 
@@ -421,7 +418,7 @@ has_peak <- function(x) {
 
 guess_ngaussian <- function(segment, min_height = 1) {
 
-  segment <- filter(segment, y_max >= min_height)
+  segment <- filter_(segment, ~y_max >= min_height)
   return(segment)
 
 }
@@ -507,9 +504,9 @@ set_bounds <- function(starting_values) {
 #' @examples
 #' data(spectra)
 #' myfit <- cdom_gaussian(spectra$wavelength,
-#'                        spectra$spc1,
-#'                        min_distance = 25,
-#'                        min_height = 0.5)
+#'                        spectra$spc21,
+#'                        min_distance = 50,
+#'                        min_height = 10)
 #'
 #' predict(myfit)
 predict.gaussian_fit <- function(object, ...) {
@@ -531,9 +528,9 @@ predict.gaussian_fit <- function(object, ...) {
 #' @examples
 #' data(spectra)
 #' myfit <- cdom_gaussian(spectra$wavelength,
-#'                        spectra$spc1,
-#'                        min_distance = 25,
-#'                        min_height = 0.5)
+#'                        spectra$spc21,
+#'                        min_distance = 50,
+#'                        min_height = 10)
 #'
 #' coef(myfit)
 coef.gaussian_fit <- function(object, ...) {
@@ -554,9 +551,9 @@ coef.gaussian_fit <- function(object, ...) {
 #' @examples
 #' data(spectra)
 #' myfit <- cdom_gaussian(spectra$wavelength,
-#'                        spectra$spc1,
-#'                        min_distance = 25,
-#'                        min_height = 0.5)
+#'                        spectra$spc21,
+#'                        min_distance = 50,
+#'                        min_height = 10)
 #' plot(myfit)
 
 plot.gaussian_fit <- function(x, ...) {
@@ -567,15 +564,16 @@ plot.gaussian_fit <- function(x, ...) {
   components$x <- x$x
 
   # Plot showing raw data and the fitted curve
-  p1 <- ggplot(df, aes(x = x, y = y)) +
+  p1 <- ggplot(df, aes_string(x = "x", y = "y")) +
     geom_point() +
-    geom_line(data = components, aes(x = x, y = spectra), col = "red")
+    geom_line(data = components, aes_string(x = "x", y = "spectra"), col = "red")
 
   # Plot showing the Gaussian components
-  df <- gather(components, component, value, starts_with("component"))
+  n <- names(components)[grepl("component", names(components))]
+  df <- gather_(components, "component", "value", n)
 
-  p2 <- ggplot(df, aes(x = x, y = value)) +
-    geom_line(aes(color = component))
+  p2 <- ggplot(df, aes_string(x = "x", y = "value")) +
+    geom_line(aes_string(color = "component"))
 
   p <- gridExtra::grid.arrange(p1, p2)
 
@@ -600,8 +598,8 @@ extract_components <- function(x) {
 
   df <- data.frame(param = names(coef(x)[grepl("p\\d", names(coef(x)))]),
                    estimated = coef(x)[grepl("p\\d", names(coef(x)))])
-  df <- tidyr::separate(df, param, c("param", "component"), 2)
-  df <- group_by(df, component)
+  df <- tidyr::separate_(df, "param", c("param", "component"), 2)
+  df <- group_by_(df, "component")
   df <- nest(df)
 
   components <- purrr::map(df$data, ~ gaussian(., x = x$x))
