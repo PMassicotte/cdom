@@ -31,7 +31,7 @@ The function will return \code{NULL} if the model did not converged.
 Fit an exponential model to CDOM data.
 }
 \details{
-\deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
+\deqn{y = a0 * e^{(-S(x - \lambda_0))} + K}
 }
 \examples{
 # Fit an exponential model using the reference wavelength 350 between 190 and 900 nm.
@@ -43,4 +43,3 @@ fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 plot(spectra$wavelength, spectra$spc1)
 lines(spectra$wavelength, fit$data$.fitted, col = "red")
 }
-

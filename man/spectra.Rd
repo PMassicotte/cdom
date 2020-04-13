@@ -4,7 +4,9 @@
 \name{spectra}
 \alias{spectra}
 \title{CDOM absorption data.}
-\format{A data frame with 711 rows and 26 variables}
+\format{
+A data frame with 711 rows and 26 variables
+}
 \usage{
 data(spectra)
 }
@@ -28,4 +30,3 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
  geom_line(size = 0.1)
 }
 \keyword{datasets}
-

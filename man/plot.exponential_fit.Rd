@@ -27,4 +27,3 @@ p <- plot(fit)
 p
 p + ggtitle("My super fit")
 }
-

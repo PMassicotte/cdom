@@ -1,6 +1,6 @@
 #' Fit an exponential model to CDOM data.
 #'
-#' @details \deqn{y = a0 + e^{(-S(x - \lambda_0))} + K}
+#' @details \deqn{y = a0 * e^{(-S(x - \lambda_0))} + K}
 #'
 #' @param wl The wavelength vector.
 #' @param absorbance The absorbance vector.

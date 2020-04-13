@@ -23,4 +23,3 @@ data(spectra)
 fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 summary(fit)
 }
-
