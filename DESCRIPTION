@@ -17,6 +17,6 @@ Imports:
     tidyr,
     broom,
     purrr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.3
 Suggests:
     eemR

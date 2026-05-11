@@ -10,3 +10,4 @@ README.Rmd
 ^flake\.lock$
 ^\.envrc$
 ^\.direnv$
+^\.r-libs$
