@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "arf": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778406414,
+        "narHash": "sha256-y41lc4TwoV86GrhPHPYm3WAxTxAur08PfS+8yEPCPyI=",
+        "owner": "eitsupi",
+        "repo": "arf",
+        "rev": "892b6b2a836e5bc09edf0c203a72df03cd0bf09c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "eitsupi",
+        "repo": "arf",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1777954456,
+        "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "549bd84d6279f9852cae6225e372cc67fb91a4c1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "arf": "arf",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

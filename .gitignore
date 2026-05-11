@@ -4,3 +4,4 @@
 library.bib
 test.R
 .*.Rnb.cached
+/.direnv

@@ -6,3 +6,7 @@ README.Rmd
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^cran-comments\.md$
+^flake\.nix$
+^flake\.lock$
+^\.envrc$
+^\.direnv$
