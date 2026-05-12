@@ -1,15 +1,18 @@
+## Resubmission
+
+This is a resubmission to update the maintainer email address, which was
+previously bouncing. The CITATION file has also been updated to use the
+modern `bibentry()` and `person()` functions instead of the deprecated
+`citEntry()` and `personList()`.
+
+pm@bios.au.dk was my previous email address, which was bouncing. The new email
+address is pmassicotte@hotmail.com
+
 ## Test environments
 
-* Tested on Linux (R 3.2.3) using Travis CI
-* Tested on Mac OS X 10.9 or higher (R 3.2.3) using Travis CI
-* Tested on Windows (R 3.2.3) using AppVeyor
-* Tested on Windows (R 3.2.1) Windows 10 (personal computer)
+- Local Linux (R 4.x)
+- win-builder (R-release and R-devel)
 
 ## R CMD check results
 
-* There were no ERRORs, no WARNINGs and no NOTEs. 
-
-## Win builder
-
-* There were no errors reported for R-release and R-devel.
-
+- There were no ERRORs, no WARNINGs and no NOTEs.
