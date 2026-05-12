@@ -12,6 +12,9 @@ address is pmassicotte@hotmail.com
 
 - Local Linux (R 4.x)
 - win-builder (R-release and R-devel)
+- macOS (R-release)
+- Ubuntu (R-release, R-devel, R-oldrel - 1)
+- Windows (R-release)
 
 ## R CMD check results
 
