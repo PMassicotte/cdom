@@ -12,3 +12,4 @@ README.Rmd
 ^\.direnv$
 ^\.r-libs$
 bibliography.bib
+^\.github$

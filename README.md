@@ -1,5 +1,13 @@
 
-## cdom [![Travis-CI Build Status](https://api.travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://app.travis-ci.com/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/cdom)](https://cran.r-project.org/package=cdom) [![Downloads](http://cranlogs.r-pkg.org/badges/cdom?color=brightgreen)](https://www.r-pkg.org:443/pkg/cdom)
+## cdom
+
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/PMassicotte/cdom/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PMassicotte/cdom/actions/workflows/R-CMD-check.yaml)
+[![CRAN](https://www.r-pkg.org/badges/version/cdom)](https://cran.r-project.org/package=cdom)
+[![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](https://www.gnu.org/licenses/gpl-2.0.html)
+
+<!-- badges: end -->
 
 The **cdom** package implements various functions used to model and
 calculate metrics from absorption spectra of chromophotic dissolved
