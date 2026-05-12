@@ -20,7 +20,7 @@
 #'  The default value is 0.8 meaning that the determination coefficient of the
 #'  regression between log-transformed data and wavelength should be >= 0.8.
 #'
-#'@references \url{http://doi.wiley.com/10.4319/lo.2009.54.2.0590}
+#'@references \doi{10.4319/lo.2009.54.2.0590}
 #'
 #'@return A dataframe containing the centered wavelength, the calculated slope
 #'  and the determination coefficient of the linear regression used to claculate

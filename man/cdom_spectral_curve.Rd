@@ -33,5 +33,5 @@ res <- cdom_spectral_curve(spectra$wavelength, spectra$spc2)
 plot(res$wl, res$s, type = "l")
 }
 \references{
-\url{http://doi.wiley.com/10.4319/lo.2009.54.2.0590}
+\doi{10.4319/lo.2009.54.2.0590}
 }

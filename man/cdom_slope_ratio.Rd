@@ -29,5 +29,5 @@ cdom_slope_ratio(spectra$wavelength, spectra$spc1)
 
 }
 \references{
-\url{http://www.aslo.org/lo/toc/vol_53/issue_3/0955.html}
+\doi{10.4319/lo.2008.53.3.0955}
 }
