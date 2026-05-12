@@ -1,3 +1,5 @@
+# cdom 0.1.1
+
 # cdom 0.1.1 (Unreleased)
 
 - `cdom_fit_exponential()` has been renamed to `cdom_exponential()`.
