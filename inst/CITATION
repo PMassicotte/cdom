@@ -10,6 +10,6 @@ bibentry(
   volume       = "180",
   number       = "",
   pages        = "24--32",
-  url          = "http://linkinghub.elsevier.com/retrieve/pii/S0304420316300081",
+  url          = "https://linkinghub.elsevier.com/retrieve/pii/S0304420316300081",
   textVersion  = "Massicotte, P., and Markager, S. (2016). Using a Gaussian decomposition approach to model absorption spectra of chromophoric dissolved organic matter. Mar. Chem. 180, 24-32. doi:10.1016/j.marchem.2016.01.008."
 )
