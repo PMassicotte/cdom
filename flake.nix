@@ -100,6 +100,7 @@
           pkgdown
           rcmdcheck
           urlchecker
+          V8
 
           # IDE support (R.nvim / LSP)
           httpgd
@@ -132,6 +133,13 @@
               jarl # fast R linter (from nixpkgs)
               qpdf # PDF compression checks
               pandoc
+              html-tidy # silences the "no command 'tidy' found" check NOTE
+              # TeX bundle for `R CMD check` PDF manual.
+              # scheme-medium covers the standard pieces; `inconsolata` is
+              # the font Rd.sty needs and is what triggered the LaTeX error.
+              (texlive.combine {
+                inherit (texlive) scheme-medium inconsolata;
+              })
             ];
 
             shellHook = ''
