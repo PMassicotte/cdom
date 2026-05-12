@@ -56,7 +56,7 @@ a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
 ``` r
 library(ggplot2)
 library(cdom)
-data("spectra")
+data(spectra)
 
 fit <- cdom_exponential(
   wl = spectra$wavelength,
@@ -93,7 +93,7 @@ detailed information.
 
 ``` r
 library(cdom)
-data("spectra")
+data(spectra)
 
 cdom_slope_ratio(spectra$wavelength, spectra$spc1)
 ## [1] 1.325082
@@ -109,7 +109,7 @@ information.
 
 ``` r
 library(cdom)
-data("spectra")
+data(spectra)
 
 res <- cdom_spectral_curve(
   wl = spectra$wavelength,
