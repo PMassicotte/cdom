@@ -2,6 +2,7 @@
 output:
   github_document:
     html_preview: true
+bibliography: bibliography.bib
 ---
 
 ```{r, echo = FALSE}
@@ -48,7 +49,7 @@ ls("package:cdom")
 
 ## The spectral slope (S)
 
-The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @jJerlov-1968, @lLundgren-1976, @Bricaud-Morel-Prieur-1981.
+The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov-1968, @Lundgren-1976, @Bricaud-Morel-Prieur-1981.
 
 ```tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -75,7 +76,7 @@ p
 
 ## The slope ratio (SR)
 
-The `cdom_slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See @Helms2008 for detailed information.
+The `cdom_slope_ratio()` function calculates the slope ratio (S<sub>R</sub>) which is defined as: S<sub>275-295</sub>/S<sub>350-400</sub>. See @Helms-etal-2008 for detailed information.
 
 ```{r sr}
 library(cdom)
@@ -86,7 +87,7 @@ cdom_slope_ratio(spectra$wavelength, spectra$spc1)
 
 ## The spectral curve
 
-The `cdom_spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding window of 21 nm interval (default) at 1 nm resolution. See @Loiselle2009 for detailed information.
+The `cdom_spectral_curve()` function generates the spectral curve using the slope of the linear regression between the natural log absorption spectrum and wavelengths over a sliding window of 21 nm interval (default) at 1 nm resolution. See @Loiselle-etal-2009 for detailed information.
 
 ```{r spectral_curve}
 library(cdom)

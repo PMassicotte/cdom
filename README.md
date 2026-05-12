@@ -8,10 +8,10 @@ organic matter (CDOM).
 This package provides:
 
 1.  Simple wrappers to calculate common metrics found in the literature.
-    - The **spectral curve** \[@Loiselle-etal-2009\].
-    - The **slope ratio (Sr)** \[@Helms-etal-2008\].
-    - The **spectral slope (S)** \[@Jerlov-1968; @Lundgren-1976;
-      @Bricaud-Morel-Prieur-1981\].
+    - The **spectral curve** (Loiselle et al. 2009).
+    - The **slope ratio (Sr)** (Helms et al. 2008).
+    - The **spectral slope (S)** (Jerlov 1968; Lundgren 1976; Bricaud,
+      Morel, and Prieur 1981).
 2.  The function to use the **Gaussian decomposition approach** proposed
     in Massicotte and Markager, (2015).
 
@@ -38,8 +38,8 @@ ls("package:cdom")
 ## The spectral slope (S)
 
 The `cdom_fit_exponential()` function fits an exponential curve to CDOM
-data using the simple model proposed by @jJerlov-1968, @lLundgren-1976,
-@Bricaud-Morel-Prieur-1981.
+data using the simple model proposed by Jerlov (1968), Lundgren (1976),
+Bricaud, Morel, and Prieur (1981).
 
 ``` tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -80,8 +80,8 @@ p
 
 The `cdom_slope_ratio()` function calculates the slope ratio
 (S<sub>R</sub>) which is defined as:
-S<sub>275-295</sub>/S<sub>350-400</sub>. See @Helms2008 for detailed
-information.
+S<sub>275-295</sub>/S<sub>350-400</sub>. See Helms et al. (2008) for
+detailed information.
 
 ``` r
 library(cdom)
@@ -96,7 +96,7 @@ cdom_slope_ratio(spectra$wavelength, spectra$spc1)
 The `cdom_spectral_curve()` function generates the spectral curve using
 the slope of the linear regression between the natural log absorption
 spectrum and wavelengths over a sliding window of 21 nm interval
-(default) at 1 nm resolution. See @Loiselle2009 for detailed
+(default) at 1 nm resolution. See Loiselle et al. (2009) for detailed
 information.
 
 ``` r
@@ -223,3 +223,53 @@ citation("cdom")
 ```
 
 # References
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
+
+<div id="ref-Bricaud-Morel-Prieur-1981" class="csl-entry">
+
+Bricaud, Annick, André Morel, and Louis Prieur. 1981. “Absorption by
+Dissolved Organic Matter of the Sea (Yellow Substance) in the UV and
+Visible Domains.” *Limnology and Oceanography* 26 (1): 43–53.
+<https://doi.org/10.4319/lo.1981.26.1.0043>.
+
+</div>
+
+<div id="ref-Helms-etal-2008" class="csl-entry">
+
+Helms, John R., Aron Stubbins, Jason D. Ritchie, Elizabeth C. Minor,
+David J. Kieber, and Kenneth Mopper. 2008. “Absorption Spectral Slopes
+and Slope Ratios as Indicators of Molecular Weight, Source, and
+Photobleaching of Chromophoric Dissolved Organic Matter.” *Limnology and
+Oceanography* 53 (3): 955–69.
+<https://doi.org/10.4319/lo.2008.53.3.0955>.
+
+</div>
+
+<div id="ref-Jerlov-1968" class="csl-entry">
+
+Jerlov, N. G. 1968. *Optical Oceanography*. New York: Elsevier
+Publishing Company.
+
+</div>
+
+<div id="ref-Loiselle-etal-2009" class="csl-entry">
+
+Loiselle, Steven A., Luca Bracchini, Arduino M. Dattilo, Maso Ricci,
+Antonio Tognazzi, Andres Cézar, and Claudio Rossi. 2009. “The Optical
+Characterization of Chromophoric Dissolved Organic Matter Using
+Wavelength Distribution of Absorption Spectral Slopes.” *Limnology and
+Oceanography* 54 (2): 590–97.
+<https://doi.org/10.4319/lo.2009.54.2.0590>.
+
+</div>
+
+<div id="ref-Lundgren-1976" class="csl-entry">
+
+Lundgren, Bo. 1976. “Spectral Transmittance Measurements in the Baltic.”
+Copenhagen: Institute Physical Oceanography University of Copenhagen.
+
+</div>
+
+</div>

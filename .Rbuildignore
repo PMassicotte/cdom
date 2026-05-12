@@ -11,3 +11,4 @@ README.Rmd
 ^\.envrc$
 ^\.direnv$
 ^\.r-libs$
+bibliography.bib
