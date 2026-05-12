@@ -1,5 +1,4 @@
 ---
-bibliography: /home/persican/Documents/library.bib
 output:
   github_document:
     html_preview: true
@@ -17,17 +16,16 @@ library(ggplot2)
 theme_set(theme_bw(base_size = 12, base_family = "Open Sans"))
 ```
 
-## cdom [![Travis-CI Build Status](https://api.travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://travis-ci.org/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/cdom)](http://cran.rstudio.com/package=cdom) [![Downloads](http://cranlogs.r-pkg.org/badges/cdom?color=brightgreen)](http://www.r-pkg.org/pkg/cdom)
-
+## cdom [![Travis-CI Build Status](https://api.travis-ci.org/PMassicotte/cdom.svg?branch=master)](https://app.travis-ci.com/PMassicotte/cdom) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PMassicotte/cdom?branch=master&svg=true)](https://ci.appveyor.com/project/PMassicotte/cdom) [![Package-License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/cdom)](https://cran.r-project.org/package=cdom) [![Downloads](http://cranlogs.r-pkg.org/badges/cdom?color=brightgreen)](https://www.r-pkg.org:443/pkg/cdom)
 
 The **cdom** package implements various functions used to model and calculate metrics from absorption spectra of chromophotic dissolved organic matter (CDOM).
 
 This package provides:
 
 1. Simple wrappers to calculate common metrics found in the literature.
-    + The **spectral curve** [@Loiselle2009].
-    + The **slope ratio (Sr)** [@Helms2008].
-    + The **spectral slope (S)** [@Jerlov1968; @Lundgren1976; @Bricaud1981].
+   - The **spectral curve** [@Loiselle-etal-2009].
+   - The **slope ratio (Sr)** [@Helms-etal-2008].
+   - The **spectral slope (S)** [@Jerlov-1968; @Lundgren-1976; @Bricaud-Morel-Prieur-1981].
 
 2. The function to use the **Gaussian decomposition approach** proposed in Massicotte and Markager, (2015).
 
@@ -50,7 +48,7 @@ ls("package:cdom")
 
 ## The spectral slope (S)
 
-The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @Jerlov1968, @Lundgren1976, @Bricaud1981.
+The `cdom_fit_exponential()` function fits an exponential curve to CDOM data using the simple model proposed by @jJerlov-1968, @lLundgren-1976, @Bricaud-Morel-Prieur-1981.
 
 ```tex
 a(\lambda) = a(\lambda0)e^{-S(\lambda - \lambda0)} + K
@@ -61,17 +59,18 @@ library(ggplot2)
 library(cdom)
 data("spectra")
 
-fit <- cdom_exponential(wl = spectra$wavelength,
-                       absorbance = spectra$spc3,
-                       wl0 = 350,
-                       startwl = 190,
-                       endwl = 900)
+fit <- cdom_exponential(
+  wl = spectra$wavelength,
+  absorbance = spectra$spc3,
+  wl0 = 350,
+  startwl = 190,
+  endwl = 900
+)
 
 coef(fit)
 
 p <- plot(fit)
 p
-
 ```
 
 ## The slope ratio (SR)
@@ -93,19 +92,25 @@ The `cdom_spectral_curve()` function generates the spectral curve using the slop
 library(cdom)
 data("spectra")
 
-res <-  cdom_spectral_curve(wl = spectra$wavelength,
-                       absorbance = spectra$spc10,
-                       interval = 21,
-                       r2threshold = 0.98) # Maybe to restrictive...
+res <- cdom_spectral_curve(
+  wl = spectra$wavelength,
+  absorbance = spectra$spc10,
+  interval = 21,
+  r2threshold = 0.98
+) # Maybe to restrictive...
 
 ggplot(res, aes(x = wl, y = s)) +
   geom_point() +
   geom_line() +
   xlab("Wavelength (nm)") +
-  ylab(expression(paste("Spectral slope (", nm ^ {-1}, ")")))
-
+  ylab(expression(paste(
+    "Spectral slope (",
+    nm^{
+      -1
+    },
+    ")"
+  )))
 ```
-
 
 ## Using the pipe operator
 
@@ -115,16 +120,27 @@ library(tidyr)
 
 data(spectra)
 
-spectra <- spectra %>% 
-  gather(sample, absorption, starts_with("spc")) %>% 
-  group_by(sample) %>% 
-  nest() %>% 
-  mutate(model = purrr::map(data, ~cdom_exponential(.$wavelength, .$absorption, wl0 = 350, startwl = 190, endwl = 900)))
-
-
-#spectra %>% unnest(model %>% purrr::map(~.$data$.fitted))
+spectra_nested <- spectra %>%
+  pivot_longer(
+    starts_with("spc"),
+    names_to = "sample",
+    values_to = "absorption"
+  ) %>%
+  group_by(sample) %>%
+  nest() %>%
+  mutate(
+    model = purrr::map(
+      data,
+      ~ cdom_exponential(
+        .$wavelength,
+        .$absorption,
+        wl0 = 350,
+        startwl = 190,
+        endwl = 900
+      )
+    )
+  )
 ```
-
 
 # Data
 
@@ -133,14 +149,25 @@ A total 25 absorption spectra are provided in the package.
 ```{r data}
 library(ggplot2)
 library(tidyr)
-data("spectra")
+data(spectra)
 
-spectra <- gather(spectra, sample, absorption, -wavelength)
+spectra <- pivot_longer(
+  spectra,
+  starts_with("spc"),
+  names_to = "sample",
+  values_to = "absorption"
+)
 
 ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
   geom_line(size = 0.1) +
   xlab("Wavelength (nm)") +
-  ylab(expression(paste("Absorption (", m ^ {-1}, ")")))
+  ylab(expression(paste(
+    "Absorption (",
+    m^{
+      -1
+    },
+    ")"
+  )))
 ```
 
 # How to cite the package
@@ -148,6 +175,5 @@ ggplot(spectra, aes(x = wavelength, y = absorption, group = sample)) +
 ```{r}
 citation("cdom")
 ```
-
 
 # References

@@ -131,6 +131,7 @@
               arf # modern Rust-based R console
               jarl # fast R linter (from nixpkgs)
               qpdf # PDF compression checks
+              pandoc
             ];
 
             shellHook = ''

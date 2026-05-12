@@ -12,7 +12,7 @@
 #'
 #'   \deqn{SR = \frac{S_{275-295}}{S_{350-400}}}
 #'
-#' @references \url{http://www.aslo.org/lo/toc/vol_53/issue_3/0955.html}
+#' @references \doi{10.4319/lo.2008.53.3.0955}
 #'
 #' @inheritParams cdom_exponential
 #'
