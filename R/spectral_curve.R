@@ -32,15 +32,21 @@
 #'res <- cdom_spectral_curve(spectra$wavelength, spectra$spc2)
 #'plot(res$wl, res$s, type = "l")
 
-cdom_spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8) {
-
-  stopifnot(length(wl) == length(absorbance),
-            is.numeric(absorbance),
-            is.numeric(wl),
-            is.vector(wl),
-            is.vector(absorbance),
-            is.numeric(interval),
-            is.numeric(r2threshold))
+cdom_spectral_curve <- function(
+  wl,
+  absorbance,
+  interval = 21,
+  r2threshold = 0.8
+) {
+  stopifnot(
+    length(wl) == length(absorbance),
+    is.numeric(absorbance),
+    is.numeric(wl),
+    is.vector(wl),
+    is.vector(absorbance),
+    is.numeric(interval),
+    is.numeric(r2threshold)
+  )
 
   #--------------------------------------------
   # Resample data by 1 nm increment.
@@ -51,7 +57,7 @@ cdom_spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8
   yy <- sf(xx)
 
   ## Adjust the offset of the spectral (we do not want negative values).
-  if(min(yy) < 0){
+  if (min(yy) < 0) {
     yy <- yy - min(yy)
   }
 
@@ -65,8 +71,7 @@ cdom_spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8
   yy_log <- log(yy)
   yy_log[yy_log == -Inf] <- NA
 
-  for(i in min(xx):(max(xx) - interval)){
-
+  for (i in min(xx):(max(xx) - interval)) {
     index <- xx >= i & xx <= (i + interval)
 
     fit <- lm(yy_log[index] ~ xx[index])
@@ -83,5 +88,4 @@ cdom_spectral_curve <- function(wl, absorbance, interval = 21, r2threshold = 0.8
   res <- na.omit(res)
 
   return(res)
-
 }

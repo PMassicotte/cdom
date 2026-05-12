@@ -25,12 +25,13 @@
 #'
 
 cdom_slope_ratio <- function(wl, absorbance) {
-
-  stopifnot(length(wl) == length(absorbance),
-            is.numeric(absorbance),
-            is.numeric(wl),
-            is.vector(wl),
-            is.vector(absorbance))
+  stopifnot(
+    length(wl) == length(absorbance),
+    is.numeric(absorbance),
+    is.numeric(wl),
+    is.vector(wl),
+    is.vector(absorbance)
+  )
   #--------------------------------------------
   # Get data
   #--------------------------------------------

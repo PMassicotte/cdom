@@ -32,20 +32,25 @@
 #' plot(spectra$wavelength, spectra$spc1)
 #' lines(spectra$wavelength, fit$data$.fitted, col = "red")
 
-cdom_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
+cdom_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl) {
+  stopifnot(
+    length(wl) == length(absorbance),
+    is.numeric(absorbance),
+    is.numeric(wl),
+    is.vector(wl),
+    is.vector(absorbance),
+    is.numeric(wl0),
+    is.numeric(startwl),
+    is.numeric(endwl),
+    wl0 > min(wl) & wl0 < max(wl)
+  )
 
-  stopifnot(length(wl) == length(absorbance),
-            is.numeric(absorbance),
-            is.numeric(wl),
-            is.vector(wl),
-            is.vector(absorbance),
-            is.numeric(wl0),
-            is.numeric(startwl),
-            is.numeric(endwl),
-            wl0 > min(wl) & wl0 < max(wl))
-
-  if (missing(startwl)) {startwl = min(wl)}
-  if (missing(endwl)) {endwl = max(wl)}
+  if (missing(startwl)) {
+    startwl = min(wl)
+  }
+  if (missing(endwl)) {
+    endwl = max(wl)
+  }
 
   #--------------------------------------------
   # Get a0 value.
@@ -64,29 +69,31 @@ cdom_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
   #--------------------------------------------
   # Fit the data.
   #--------------------------------------------
-  control <- list(minFactor = 1e-10,
-                  warnOnly = FALSE,
-                  maxiter = 1024,
-                  maxfev = 600)
+  control <- list(
+    minFactor = 1e-10,
+    warnOnly = FALSE,
+    maxiter = 1024,
+    maxfev = 600
+  )
 
   safe_nls <- purrr::safely(minpack.lm::nlsLM)
 
-  fit <- safe_nls(y ~ a0 * exp(-S * (x - wl0)) + K,
-                 start = c(S = 0.02, K = 0.01, a0 = a0),
-                 lower = c(S = 0, K = -Inf, a0 = 0),
-                 upper = c(S = 1, K = Inf, a0 = max(y)),
-                 control = control,
-                 data = df)
+  fit <- safe_nls(
+    y ~ a0 * exp(-S * (x - wl0)) + K,
+    start = c(S = 0.02, K = 0.01, a0 = a0),
+    lower = c(S = 0, K = -Inf, a0 = 0),
+    upper = c(S = 1, K = Inf, a0 = max(y)),
+    control = control,
+    data = df
+  )
 
   if (is.null(fit$error)) {
-
     r2 <- 1 - sum((y - predict(fit$result))^2) / (length(y) * var(y))
 
     res <- list(model = fit$result, r2 = r2, x = x, y = y)
     class(res) <- "exponential_fit"
 
     return(res)
-
   } else {
     return(NULL)
   }
@@ -106,11 +113,9 @@ cdom_exponential <- function(wl, absorbance, wl0 = 350, startwl, endwl){
 #' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 #' predict(fit)
 predict.exponential_fit <- function(object, ...) {
-
   res <- predict(object$model)
 
   return(res)
-
 }
 
 #' Extract Model Coefficients from a CDOM exponential fit
@@ -127,11 +132,9 @@ predict.exponential_fit <- function(object, ...) {
 #' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 #' coef(fit)
 coef.exponential_fit <- function(object, ...) {
-
   res <- coef(object$model)
 
   return(res)
-
 }
 
 #' Plot a Fitted CDOM Exponential Curve
@@ -152,7 +155,6 @@ coef.exponential_fit <- function(object, ...) {
 #' p
 #' p + ggtitle("My super fit")
 plot.exponential_fit <- function(x, ...) {
-
   df <- data.frame(x = x$x, y = x$y, yy = predict(x))
 
   p <- ggplot(df, aes(x = x)) +
@@ -176,8 +178,6 @@ plot.exponential_fit <- function(x, ...) {
 #' fit <- cdom_exponential(spectra$wavelength, spectra$spc1, 350, 190, 900)
 #' summary(fit)
 summary.exponential_fit <- function(object, ...) {
-
   print(summary(object$model))
   cat("r2 = ", object$r2)
-
 }
